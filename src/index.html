@@ -1,0 +1,208 @@
+<title>HabeshaOnline</title>
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600;12..96,700&family=Instrument+Sans:wght@400;500;600&display=swap" />
+
+<!--include:styles/fonts.css-->
+<!--include:styles/tokens.css-->
+<!--include:styles/base.css-->
+<!--include:styles/components.css-->
+<!--include:styles/screens.css-->
+
+<a class="skip" href="#main">Skip to listings</a>
+
+<header class="topbar">
+  <div class="topbar-in">
+    <button class="brand" onclick="HO.go('browse')" aria-label="HabeshaOnline home">
+      <span class="brand-mark" aria-hidden="true"></span>
+      <span class="brand-name">Habesha<em>Online</em></span>
+    </button>
+
+    <nav class="nav" id="nav" aria-label="Main"></nav>
+
+    <div class="topbar-right">
+      <div class="lang" role="group" aria-label="Language">
+        <button class="lang-btn on" data-lang="en" onclick="HO.setLang('en')">EN</button>
+        <button class="lang-btn" data-lang="am" onclick="HO.setLang('am')">አማ</button>
+      </div>
+      <button class="btn btn-accent btn-post" onclick="HO.go('post')" data-i18n="nav.post">Post an ad</button>
+    </div>
+  </div>
+  <div class="tibeb" aria-hidden="true"></div>
+</header>
+
+<main id="main">
+
+  <!-- ── Browse ───────────────────────────────────────────── -->
+  <section class="screen" id="screen-browse" hidden>
+    <div class="hero">
+      <div class="hero-main">
+      <div class="hero-copy">
+        <p class="eyebrow" data-i18n="hero.eyebrow">Colorado · ኮሎራዶ</p>
+        <h1 data-i18n="hero.title">Buy, sell and hire inside the Habesha community</h1>
+        <p class="lede" data-i18n="hero.lede">Salons, apartments, cars, catering and jobs — posted by neighbors in Denver, Aurora and the Front Range. Listings run in Amharic and English.</p>
+      </div>
+      <form class="searchbar" onsubmit="return HO.browse.submitSearch(event)">
+        <span class="search-ico" aria-hidden="true">⌕</span>
+        <input id="searchInput" type="search" autocomplete="off"
+               oninput="HO.browse.onSearch(this.value)"
+               data-i18n-ph="search.placeholder"
+               placeholder="Search rooms, salons, cars…" aria-label="Search listings" />
+        <button type="submit" class="btn btn-accent" data-i18n="search.go">Search</button>
+      </form>
+      <div class="stat-strip" id="statStrip"></div>
+      </div>
+      <aside class="hero-side" id="heroSide"></aside>
+    </div>
+
+    <div class="rail-wrap">
+      <div class="rail" id="catRail" role="group" aria-label="Categories"></div>
+    </div>
+
+    <div class="band-rule" aria-hidden="true"></div>
+
+    <section class="block" id="featuredBlock">
+      <div class="block-head">
+        <h2 data-i18n="browse.featured">Featured this week</h2>
+        <p class="block-sub" data-i18n="browse.featuredSub">Paid placements — they wear the woven band.</p>
+      </div>
+      <div class="grid" id="featuredGrid"></div>
+    </section>
+
+    <section class="block">
+      <div class="block-head">
+        <h2 id="recentTitle" data-i18n="browse.recent">Latest listings</h2>
+        <div class="block-tools">
+          <span class="count" id="resultsCount"></span>
+          <label class="sort">
+            <span data-i18n="browse.sort">Sort</span>
+            <select id="sortSel" onchange="HO.browse.setSort(this.value)">
+              <option value="new" data-i18n="sort.new">Newest</option>
+              <option value="low" data-i18n="sort.low">Price: low to high</option>
+              <option value="high" data-i18n="sort.high">Price: high to low</option>
+            </select>
+          </label>
+          <button class="link-btn" id="clearFilter" hidden onclick="HO.browse.clearFilters()" data-i18n="browse.clear">Clear filters</button>
+        </div>
+      </div>
+      <div class="grid" id="recentGrid"></div>
+      <div class="empty" id="browseEmpty" hidden>
+        <p data-i18n="browse.emptyTitle">Nothing matches that search yet.</p>
+        <button class="btn btn-ghost" onclick="HO.browse.clearFilters()" data-i18n="browse.emptyCta">Show everything</button>
+      </div>
+    </section>
+
+    <div class="band-rule" aria-hidden="true"></div>
+
+    <section class="block how">
+      <div class="block-head"><h2 data-i18n="how.title">How it works</h2></div>
+      <ol class="how-steps" id="howSteps"></ol>
+    </section>
+  </section>
+
+  <!-- ── Listing detail ───────────────────────────────────── -->
+  <section class="screen" id="screen-detail" hidden>
+    <button class="back" onclick="HO.back()" data-i18n="common.back">← Back</button>
+    <div id="detailBody"></div>
+  </section>
+
+  <!-- ── Post an ad ───────────────────────────────────────── -->
+  <section class="screen" id="screen-post" hidden>
+    <button class="back" onclick="HO.back()" data-i18n="common.back">← Back</button>
+    <div id="postBody"></div>
+  </section>
+
+  <!-- ── Pricing ──────────────────────────────────────────── -->
+  <section class="screen" id="screen-pricing" hidden>
+    <div class="block-head center">
+      <h2 data-i18n="pricing.title">Plans for sellers</h2>
+      <p class="block-sub" data-i18n="pricing.sub">Free listings run 7 days. Paid plans add photos, video and placement.</p>
+    </div>
+    <div class="tiers" id="tiers"></div>
+    <p class="fineprint" data-i18n="pricing.note">Prices in USD. This is a demonstration site — no card is charged at checkout.</p>
+  </section>
+
+  <!-- ── Checkout ─────────────────────────────────────────── -->
+  <section class="screen" id="screen-checkout" hidden>
+    <button class="back" onclick="HO.back()" data-i18n="common.back">← Back</button>
+    <div id="checkoutBody"></div>
+  </section>
+
+  <!-- ── Saved ────────────────────────────────────────────── -->
+  <section class="screen" id="screen-saved" hidden>
+    <div class="block-head"><h2 data-i18n="saved.title">Saved listings</h2>
+      <p class="block-sub" data-i18n="saved.sub">Kept in this browser only — they don't leave your device.</p></div>
+    <div class="grid" id="savedGrid"></div>
+    <div class="empty" id="savedEmpty" hidden>
+      <p data-i18n="saved.empty">Tap the bookmark on any listing to keep it here.</p>
+      <button class="btn btn-ghost" onclick="HO.go('browse')" data-i18n="saved.emptyCta">Browse listings</button>
+    </div>
+  </section>
+
+  <!-- ── Inbox ────────────────────────────────────────────── -->
+  <section class="screen" id="screen-inbox" hidden>
+    <div class="block-head"><h2 data-i18n="inbox.title">Inquiries</h2>
+      <p class="block-sub" data-i18n="inbox.sub">Messages buyers sent about your listings.</p></div>
+    <div id="inboxBody"></div>
+  </section>
+
+  <!-- ── You / my listings ────────────────────────────────── -->
+  <section class="screen" id="screen-you" hidden>
+    <div id="youBody"></div>
+  </section>
+
+  <!-- ── Seller profile ───────────────────────────────────── -->
+  <section class="screen" id="screen-seller" hidden>
+    <button class="back" onclick="HO.back()" data-i18n="common.back">← Back</button>
+    <div id="sellerBody"></div>
+  </section>
+
+  <!-- ── Moderation / reports ─────────────────────────────── -->
+  <section class="screen" id="screen-moderation" hidden>
+    <div class="block-head"><h2 data-i18n="mod.title">Reported listings</h2>
+      <p class="block-sub" data-i18n="mod.sub">Listings flagged by buyers.</p></div>
+    <div id="moderationBody"></div>
+  </section>
+
+</main>
+
+<footer class="foot">
+  <div class="tibeb" aria-hidden="true"></div>
+  <div class="foot-in">
+    <div>
+      <p class="foot-brand">HabeshaOnline</p>
+      <p class="foot-note" data-i18n="foot.note">A community marketplace prototype for the Ethiopian and Eritrean community in Colorado.</p>
+    </div>
+    <div class="foot-links">
+      <button class="link-btn" onclick="HO.go('pricing')" data-i18n="nav.pricing">Pricing</button>
+      <button class="link-btn" onclick="HO.go('post')" data-i18n="nav.post">Post an ad</button>
+      <button class="link-btn" onclick="HO.go('you')" data-i18n="nav.you">Your account</button>
+      <button class="link-btn" onclick="HO.go('moderation')" data-i18n="nav.moderation">Reports</button>
+    </div>
+    <p class="foot-status" id="storageStatus"></p>
+  </div>
+</footer>
+
+<nav class="tabbar" aria-label="Sections">
+  <button class="tab" data-screen="browse" onclick="HO.go('browse')"><span aria-hidden="true">⌂</span><span data-i18n="nav.browse">Browse</span></button>
+  <button class="tab" data-screen="saved" onclick="HO.go('saved')"><span aria-hidden="true">♡</span><span data-i18n="nav.saved">Saved</span></button>
+  <button class="tab tab-post" data-screen="post" onclick="HO.go('post')"><span aria-hidden="true">+</span><span data-i18n="nav.postShort">Post</span></button>
+  <button class="tab" data-screen="inbox" onclick="HO.go('inbox')"><span aria-hidden="true">✉</span><span data-i18n="nav.inbox">Inbox</span><span class="tab-dot" id="inboxDot" hidden></span></button>
+  <button class="tab" data-screen="you" onclick="HO.go('you')"><span aria-hidden="true">☺</span><span data-i18n="nav.you">You</span></button>
+</nav>
+
+<div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+
+<!--include:js/i18n.js-->
+<!--include:js/ethiopic.js-->
+<!--include:js/data.js-->
+<!--include:js/media.js-->
+<!--include:js/auth.js-->
+<!--include:js/store.js-->
+<!--include:js/ui.js-->
+<!--include:js/screens/browse.js-->
+<!--include:js/screens/detail.js-->
+<!--include:js/screens/post.js-->
+<!--include:js/screens/pricing.js-->
+<!--include:js/screens/account.js-->
+<!--include:js/screens/moderation.js-->
+<!--include:js/app.js-->

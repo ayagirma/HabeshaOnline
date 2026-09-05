@@ -1,0 +1,192 @@
+/* ── Base ─────────────────────────────────────────────────────────── */
+
+*, *::before, *::after { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--canvas);
+  color: var(--ink);
+  font-family: var(--f-ui);
+  font-size: 15px;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* When the page is in Amharic, put the Ge'ez face first everywhere. */
+body.lang-am { font-family: var(--f-geez), var(--f-ui); }
+body.lang-am h1, body.lang-am h2, body.lang-am h3,
+body.lang-am .brand-name, body.lang-am .price {
+  font-family: var(--f-geez), var(--f-display);
+  letter-spacing: 0;
+}
+
+h1, h2, h3, h4 {
+  font-family: var(--f-display);
+  font-weight: 600;
+  line-height: 1.15;
+  letter-spacing: -0.015em;
+  text-wrap: balance;
+  margin: 0;
+}
+h1 { font-size: clamp(28px, 4.2vw, 46px); letter-spacing: -0.03em; }
+h2 { font-size: clamp(20px, 2.4vw, 27px); }
+h3 { font-size: 18px; }
+p  { margin: 0; }
+
+a { color: inherit; }
+
+button, input, select, textarea { font: inherit; color: inherit; }
+button { cursor: pointer; }
+
+:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+  border-radius: var(--r-sm);
+}
+
+img { display: block; max-width: 100%; }
+
+.skip {
+  position: absolute; left: -9999px; top: 0; z-index: 60;
+  background: var(--surface); color: var(--ink);
+  padding: var(--s3) var(--s4); border-radius: 0 0 var(--r-md) 0;
+}
+.skip:focus { left: 0; }
+
+/* ── The tibeb band ───────────────────────────────────────────────
+   The woven border on a netela, drawn as a repeating CSS gradient:
+   saffron and berbere diamonds on enset green. It appears under the
+   header, above the footer, between sections, and along the top edge
+   of a featured card — nowhere decorative, always marking an edge.   */
+.tibeb {
+  height: 7px;
+  background:
+    repeating-linear-gradient(135deg,
+      var(--accent) 0 5px, transparent 5px 10px),
+    repeating-linear-gradient(45deg,
+      var(--berbere) 0 5px, transparent 5px 10px),
+    var(--enset);
+}
+.band-rule {
+  height: 5px;
+  margin: var(--s6) 0;
+  border-radius: var(--r-pill);
+  background:
+    repeating-linear-gradient(135deg, var(--accent) 0 4px, transparent 4px 8px),
+    repeating-linear-gradient(45deg, var(--berbere) 0 4px, transparent 4px 8px),
+    var(--enset);
+  opacity: .85;
+}
+
+/* ── Shell ────────────────────────────────────────────────────────── */
+.topbar {
+  position: sticky; top: 0; z-index: 40;
+  background: var(--header-bg);
+  color: var(--header-ink);
+}
+.topbar-in {
+  max-width: var(--wrap);
+  margin: 0 auto;
+  height: var(--topbar-h);
+  padding: 0 var(--s5);
+  display: flex; align-items: center; gap: var(--s5);
+}
+.brand {
+  display: flex; align-items: center; gap: var(--s3);
+  background: none; border: 0; padding: 0; color: inherit;
+}
+.brand-mark {
+  width: 26px; height: 26px; border-radius: 7px; flex: none;
+  background:
+    repeating-linear-gradient(135deg, var(--accent) 0 4px, transparent 4px 8px),
+    repeating-linear-gradient(45deg, var(--berbere) 0 4px, transparent 4px 8px),
+    var(--enset);
+}
+.brand-name {
+  font-family: var(--f-display);
+  font-weight: 700; font-size: 19px; letter-spacing: -0.03em;
+}
+.brand-name em { font-style: normal; color: var(--accent); }
+
+.nav { display: flex; gap: var(--s2); margin-right: auto; }
+.nav button {
+  background: none; border: 0; color: var(--header-mut);
+  padding: var(--s2) var(--s3); border-radius: var(--r-pill);
+  font-weight: 500;
+}
+.nav button:hover { color: var(--header-ink); }
+.nav button.on { color: var(--header-ink); background: rgba(255,255,255,.09); }
+
+.topbar-right { display: flex; align-items: center; gap: var(--s3); }
+.lang {
+  display: flex; padding: 2px; gap: 2px;
+  background: rgba(255,255,255,.09); border-radius: var(--r-pill);
+}
+.lang-btn {
+  border: 0; background: none; color: var(--header-mut);
+  padding: 4px 11px; border-radius: var(--r-pill); font-size: 13px; font-weight: 600;
+}
+.lang-btn.on { background: var(--header-ink); color: var(--header-bg); }
+.lang-btn[data-lang="am"] { font-family: var(--f-geez), var(--f-ui); }
+
+main {
+  max-width: var(--wrap);
+  margin: 0 auto;
+  padding: var(--s6) var(--s5) var(--s8);
+}
+.screen[hidden] { display: none; }
+
+.foot { margin-top: var(--s8); background: var(--header-bg); color: var(--header-ink); }
+.foot-in {
+  max-width: var(--wrap); margin: 0 auto;
+  padding: var(--s6) var(--s5) calc(var(--s6) + env(safe-area-inset-bottom));
+  display: grid; grid-template-columns: 1.4fr auto; gap: var(--s5);
+}
+.foot-brand { font-family: var(--f-display); font-weight: 700; font-size: 17px; }
+.foot-note { color: var(--header-mut); max-width: 46ch; font-size: 13.5px; }
+.foot-links { display: flex; flex-direction: column; gap: var(--s2); align-items: flex-start; }
+.foot-links .link-btn { color: var(--header-mut); }
+.foot-links .link-btn:hover { color: var(--header-ink); }
+.foot-status {
+  grid-column: 1 / -1; color: var(--header-mut); font-size: 12.5px;
+  border-top: 1px solid rgba(255,255,255,.12); padding-top: var(--s4);
+}
+
+/* Bottom tab bar — phones only. */
+.tabbar { display: none; }
+
+@media (max-width: 860px) {
+  .nav { display: none; }
+  .btn-post { display: none; }
+  main { padding: var(--s5) var(--s4) 96px; }
+  .foot-in { grid-template-columns: 1fr; padding-bottom: 96px; }
+  .tabbar {
+    position: fixed; left: 0; right: 0; bottom: 0; z-index: 45;
+    display: grid; grid-template-columns: repeat(5, 1fr);
+    background: var(--surface); border-top: 1px solid var(--line);
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+  .tab {
+    background: none; border: 0; color: var(--muted);
+    display: flex; flex-direction: column; align-items: center; gap: 2px;
+    padding: 9px 0 8px; font-size: 11px; font-weight: 500; position: relative;
+  }
+  .tab span:first-child { font-size: 17px; line-height: 1; }
+  .tab.on { color: var(--ink); }
+  .tab-post span:first-child {
+    background: var(--accent); color: var(--on-accent);
+    width: 30px; height: 22px; border-radius: var(--r-sm);
+    display: grid; place-items: center; font-weight: 700;
+  }
+  .tab-dot {
+    position: absolute; top: 6px; right: 50%; margin-right: -16px;
+    width: 7px; height: 7px; border-radius: 50%; background: var(--berbere);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: .01ms !important; animation-iteration-count: 1 !important;
+    transition-duration: .01ms !important; scroll-behavior: auto !important;
+  }
+}

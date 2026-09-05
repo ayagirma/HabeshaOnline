@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>MainList — Owner Dashboard Mockup</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#F5EFE2; --paper-dim:#EDE4D2; --ink:#2B2620;
+    --brick:#A63D2F; --awning:#2F5D50; --gold:#D9A441; --slate:#3A5A78;
+    --line: rgba(43,38,32,0.14);
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{ background:var(--paper); color:var(--ink); font-family:'Inter',sans-serif; -webkit-font-smoothing:antialiased; display:flex; min-height:100vh;}
+  h1,h2,h3{ font-family:'Fraunces', serif; font-weight:700; }
+  a{ color:inherit; text-decoration:none; }
+  .eyebrow{ font-family:'JetBrains Mono'; font-size:10.5px; letter-spacing:.1em; text-transform:uppercase; color:rgba(43,38,32,0.5); font-weight:500;}
+
+  /* ---- SIDEBAR ---- */
+  .sidebar{ width:220px; background:var(--ink); color:var(--paper); padding:24px 18px; display:flex; flex-direction:column; flex-shrink:0; }
+  .logo{ font-family:'Fraunces'; font-weight:700; font-size:19px; display:flex; align-items:center; gap:8px; margin-bottom:36px; }
+  .logo .dot{ width:8px; height:8px; border-radius:50%; background:var(--gold); }
+  .nav-item{ display:flex; align-items:center; gap:10px; padding:10px 12px; border-radius:6px; font-size:13.5px; font-weight:500; color:rgba(245,239,226,0.7); margin-bottom:2px; }
+  .nav-item.active{ background:rgba(245,239,226,0.1); color:var(--paper); }
+  .nav-item .ic{ width:16px; text-align:center; }
+  .sidebar .biz{ margin-top:auto; padding-top:20px; border-top:1px solid rgba(245,239,226,0.15); font-size:12.5px; }
+  .sidebar .biz .name{ font-weight:600; margin-bottom:2px; }
+  .sidebar .biz .plan{ color:var(--gold); font-family:'JetBrains Mono'; font-size:10.5px; text-transform:uppercase; }
+
+  /* ---- MAIN ---- */
+  .main{ flex:1; padding:32px 40px; overflow-x:hidden; }
+  .topbar{ display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:28px; }
+  .topbar h1{ font-size:26px; }
+  .topbar p{ font-size:13.5px; color:rgba(43,38,32,0.6); margin-top:4px; }
+  .btn{ font-size:13.5px; font-weight:600; padding:9px 16px; border-radius:5px; border:1px solid var(--ink); background:transparent; }
+  .btn.primary{ background:var(--brick); border-color:var(--brick); color:var(--paper); }
+
+  /* stat cards */
+  .stats{ display:grid; grid-template-columns:repeat(4,1fr); gap:16px; margin-bottom:32px; }
+  .stat{ background:var(--paper-dim); border:1px solid var(--line); border-radius:10px; padding:18px; }
+  .stat .eyebrow{ margin-bottom:8px; }
+  .stat .num{ font-family:'Fraunces'; font-size:28px; font-weight:700; }
+  .stat .delta{ font-size:12px; color:var(--awning); font-family:'JetBrains Mono'; margin-top:4px;}
+  .stat .delta.neutral{ color:rgba(43,38,32,0.45); }
+
+  .grid2{ display:grid; grid-template-columns:1.4fr 1fr; gap:20px; }
+
+  .panel{ background:var(--paper-dim); border:1px solid var(--line); border-radius:10px; padding:22px; margin-bottom:20px;}
+  .panel-head{ display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;}
+  .panel-head h2{ font-size:16px; }
+  .panel-head a{ font-size:12.5px; font-weight:600; color:var(--slate); }
+
+  table{ width:100%; border-collapse:collapse; font-size:13px; }
+  th{ text-align:left; font-family:'JetBrains Mono'; font-size:10px; text-transform:uppercase; letter-spacing:.05em; color:rgba(43,38,32,0.5); padding-bottom:8px; border-bottom:1px solid var(--line); font-weight:500;}
+  td{ padding:10px 0; border-bottom:1px solid var(--line); }
+  tr:last-child td{ border-bottom:none; }
+  .status{ font-family:'JetBrains Mono'; font-size:10px; text-transform:uppercase; padding:3px 8px; border-radius:20px; letter-spacing:.04em; }
+  .status.requested{ background:rgba(217,164,65,0.25); color:#8a6317; }
+  .status.confirmed{ background:rgba(47,93,80,0.18); color:var(--awning); }
+
+  .msg-item{ display:flex; gap:10px; padding:10px 0; border-bottom:1px solid var(--line); }
+  .msg-item:last-child{ border-bottom:none;}
+  .avatar{ width:32px; height:32px; border-radius:50%; background:var(--slate); flex-shrink:0; }
+  .msg-item .name{ font-size:13px; font-weight:600; }
+  .msg-item .preview{ font-size:12.5px; color:rgba(43,38,32,0.6); }
+  .unread-dot{ width:7px; height:7px; border-radius:50%; background:var(--brick); margin-left:auto; flex-shrink:0; margin-top:5px;}
+
+  .review-mini{ padding:12px 0; border-bottom:1px solid var(--line); font-size:13px;}
+  .review-mini:last-child{ border-bottom:none;}
+  .review-mini .top{ display:flex; justify-content:space-between; font-size:12px; color:rgba(43,38,32,0.55); margin-bottom:4px;}
+  .stars{ color:var(--gold); }
+
+  @media (max-width:1000px){
+    .grid2{ grid-template-columns:1fr; }
+    .stats{ grid-template-columns:1fr 1fr; }
+    body{ flex-direction:column; }
+    .sidebar{ width:100%; flex-direction:row; align-items:center; }
+    .sidebar .biz{ display:none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="sidebar">
+  <div class="logo"><span class="dot"></span>MainList</div>
+  <div class="nav-item active"><span class="ic">▤</span> Overview</div>
+  <div class="nav-item"><span class="ic">✎</span> Listing</div>
+  <div class="nav-item"><span class="ic">📅</span> Bookings</div>
+  <div class="nav-item"><span class="ic">★</span> Reviews</div>
+  <div class="nav-item"><span class="ic">✉</span> Messages</div>
+  <div class="nav-item"><span class="ic">💳</span> Billing</div>
+  <div class="nav-item"><span class="ic">📈</span> Analytics</div>
+  <div class="biz">
+    <div class="name">Corbin Heating &amp; Air</div>
+    <div class="plan">Featured plan</div>
+  </div>
+</div>
+
+<div class="main">
+
+  <div class="topbar">
+    <div>
+      <h1>Good morning, Sam.</h1>
+      <p>Here's how Corbin Heating &amp; Air is doing this week.</p>
+    </div>
+    <a class="btn primary" href="#">+ Add photos</a>
+  </div>
+
+  <div class="stats">
+    <div class="stat">
+      <div class="eyebrow">Profile views</div>
+      <div class="num">1,204</div>
+      <div class="delta">↑ 18% vs last week</div>
+    </div>
+    <div class="stat">
+      <div class="eyebrow">New messages</div>
+      <div class="num">7</div>
+      <div class="delta">3 unread</div>
+    </div>
+    <div class="stat">
+      <div class="eyebrow">Pending bookings</div>
+      <div class="num">4</div>
+      <div class="delta neutral">2 need a reply today</div>
+    </div>
+    <div class="stat">
+      <div class="eyebrow">Average rating</div>
+      <div class="num">4.9</div>
+      <div class="delta neutral">128 reviews</div>
+    </div>
+  </div>
+
+  <div class="grid2">
+    <div>
+      <div class="panel">
+        <div class="panel-head"><h2>Booking requests</h2><a href="#">View all →</a></div>
+        <table>
+          <tr><th>Customer</th><th>Service</th><th>Requested</th><th>Status</th></tr>
+          <tr><td>Angela R.</td><td>Furnace inspection</td><td>Jul 5, 10:00 AM</td><td><span class="status requested">Requested</span></td></tr>
+          <tr><td>Marcus D.</td><td>AC repair</td><td>Jul 6, 2:00 PM</td><td><span class="status requested">Requested</span></td></tr>
+          <tr><td>Priya S.</td><td>System install quote</td><td>Jul 4, 9:00 AM</td><td><span class="status confirmed">Confirmed</span></td></tr>
+          <tr><td>Tom H.</td><td>Duct cleaning</td><td>Jul 3, 1:00 PM</td><td><span class="status confirmed">Confirmed</span></td></tr>
+        </table>
+      </div>
+
+      <div class="panel">
+        <div class="panel-head"><h2>Recent reviews</h2><a href="#">Manage →</a></div>
+        <div class="review-mini">
+          <div class="top"><strong>Maria T.</strong><span>2 weeks ago</span></div>
+          <span class="stars">★★★★★</span> Came out same-day when our furnace died in a cold snap.
+        </div>
+        <div class="review-mini">
+          <div class="top"><strong>Dave K.</strong><span>1 month ago</span></div>
+          <span class="stars">★★★★☆</span> Solid work on our AC install, took a bit longer than quoted.
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div class="panel">
+        <div class="panel-head"><h2>Messages</h2><a href="#">Inbox →</a></div>
+        <div class="msg-item">
+          <div class="avatar"></div>
+          <div><div class="name">Angela R.</div><div class="preview">Is 10am still good for Friday?</div></div>
+          <div class="unread-dot"></div>
+        </div>
+        <div class="msg-item">
+          <div class="avatar"></div>
+          <div><div class="name">Marcus D.</div><div class="preview">Thanks, see you then!</div></div>
+        </div>
+        <div class="msg-item">
+          <div class="avatar"></div>
+          <div><div class="name">Priya S.</div><div class="preview">Can you send the quote in writing?</div></div>
+          <div class="unread-dot"></div>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-head"><h2>Plan</h2><a href="#">Upgrade →</a></div>
+        <div class="eyebrow" style="margin-bottom:6px;">Featured — $39/mo</div>
+        <p style="font-size:13px; color:rgba(43,38,32,0.65); line-height:1.5;">Top-of-category placement, full gallery, booking calendar. Renews Jul 14.</p>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+</body>
+</html>

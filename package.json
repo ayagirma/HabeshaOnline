@@ -1,0 +1,11 @@
+{
+  "name": "habesha-online",
+  "private": true,
+  "description": "Repo root. The Next.js + Supabase app lives in web/; these scripts forward to it so you can run from here. The legacy static build (src/, dist/, scripts/) has no dependencies and builds with `node scripts/build.mjs`.",
+  "scripts": {
+    "dev": "npm --prefix web run dev",
+    "build": "npm --prefix web run build",
+    "start": "npm --prefix web run start",
+    "lint": "npm --prefix web run lint"
+  }
+}

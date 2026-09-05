@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(timeout 15 curl -sI https://registry.npmjs.org/next)",
+      "Bash(echo \"exit=$?\")",
+      "Bash(npx --yes create-next-app@latest web --typescript --eslint --app --no-tailwind --no-src-dir --import-alias \"@/*\" --use-npm)"
+    ]
+  }
+}

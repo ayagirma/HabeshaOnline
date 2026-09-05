@@ -1,0 +1,944 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>MainList — Architecture Walkthrough</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --paper:#F5EFE2; --paper-dim:#EDE4D2; --ink:#2B2620;
+    --brick:#A63D2F; --awning:#2F5D50; --gold:#D9A441; --slate:#3A5A78;
+    --line: rgba(43,38,32,0.14);
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--ink);
+    color: var(--paper);
+    font-family: 'Inter', sans-serif;
+    height: 100vh;
+    overflow: hidden;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  h1, h2, h3 { font-family: 'Fraunces', serif; }
+  code, .mono { font-family: 'JetBrains Mono', monospace; }
+
+  /* ── SLIDE CONTAINER ── */
+  .deck {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+  }
+
+  .slide {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 60px 80px;
+    opacity: 0;
+    transform: translateX(60px);
+    transition: opacity .45s ease, transform .45s ease;
+    pointer-events: none;
+  }
+  .slide.active {
+    opacity: 1;
+    transform: translateX(0);
+    pointer-events: all;
+  }
+  .slide.exit {
+    opacity: 0;
+    transform: translateX(-60px);
+    transition: opacity .35s ease, transform .35s ease;
+  }
+
+  /* ── PROGRESS BAR ── */
+  .progress-bar {
+    position: fixed;
+    top: 0; left: 0;
+    height: 3px;
+    background: var(--gold);
+    transition: width .4s ease;
+    z-index: 100;
+  }
+
+  /* ── NAV ── */
+  .nav {
+    position: fixed;
+    bottom: 28px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    background: rgba(43,38,32,0.55);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(245,239,226,0.1);
+    border-radius: 40px;
+    padding: 10px 22px;
+    z-index: 100;
+  }
+  .nav button {
+    background: none;
+    border: none;
+    color: rgba(245,239,226,0.6);
+    font-size: 18px;
+    cursor: pointer;
+    line-height: 1;
+    padding: 4px 8px;
+    border-radius: 6px;
+    transition: color .2s, background .2s;
+  }
+  .nav button:hover { color: var(--paper); background: rgba(245,239,226,0.1); }
+  .nav button:disabled { opacity: 0.2; cursor: default; background: none; }
+  .slide-counter {
+    font-family: 'JetBrains Mono';
+    font-size: 11px;
+    color: rgba(245,239,226,0.45);
+    min-width: 48px;
+    text-align: center;
+  }
+  .dot-nav {
+    display: flex;
+    gap: 6px;
+  }
+  .dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: rgba(245,239,226,0.25);
+    transition: background .2s, transform .2s;
+    cursor: pointer;
+  }
+  .dot.on { background: var(--gold); transform: scale(1.3); }
+
+  /* ── SLIDE 0 — TITLE ── */
+  .slide-title {
+    background: radial-gradient(ellipse at 30% 40%, rgba(166,61,47,0.18) 0%, transparent 65%),
+                radial-gradient(ellipse at 70% 70%, rgba(47,93,80,0.15) 0%, transparent 60%),
+                var(--ink);
+    text-align: center;
+  }
+  .slide-title .eyebrow {
+    font-family: 'JetBrains Mono';
+    font-size: 11px;
+    letter-spacing: .18em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 18px;
+  }
+  .slide-title h1 {
+    font-size: clamp(38px, 5vw, 64px);
+    line-height: 1.1;
+    margin-bottom: 16px;
+    background: linear-gradient(135deg, var(--paper) 40%, rgba(245,239,226,0.55));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .slide-title .sub {
+    font-size: 16px;
+    color: rgba(245,239,226,0.5);
+    max-width: 520px;
+    line-height: 1.6;
+    margin: 0 auto;
+  }
+  .tag-row {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    margin-top: 32px;
+    flex-wrap: wrap;
+  }
+  .tag {
+    font-family: 'JetBrains Mono';
+    font-size: 10.5px;
+    text-transform: uppercase;
+    letter-spacing: .08em;
+    padding: 5px 12px;
+    border-radius: 20px;
+    border: 1px solid rgba(245,239,226,0.18);
+    color: rgba(245,239,226,0.6);
+  }
+  .tag.gold { border-color: var(--gold); color: var(--gold); }
+
+  /* ── GENERIC LAYOUT HELPERS ── */
+  .slide-content { width: 100%; max-width: 1100px; }
+  .slide-header {
+    margin-bottom: 36px;
+  }
+  .slide-header .num {
+    font-family: 'JetBrains Mono';
+    font-size: 11px;
+    color: var(--gold);
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .slide-header h2 { font-size: clamp(24px, 3vw, 38px); }
+  .slide-header p { font-size: 14px; color: rgba(245,239,226,0.5); margin-top: 6px; }
+
+  /* ── SLIDE 1 — TECH STACK ── */
+  .stack-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+  }
+  .stack-card {
+    background: rgba(245,239,226,0.05);
+    border: 1px solid rgba(245,239,226,0.1);
+    border-radius: 10px;
+    padding: 16px 18px;
+    transition: border-color .2s, background .2s;
+  }
+  .stack-card:hover {
+    border-color: rgba(245,239,226,0.22);
+    background: rgba(245,239,226,0.08);
+  }
+  .stack-card .layer {
+    font-family: 'JetBrains Mono';
+    font-size: 9.5px;
+    text-transform: uppercase;
+    letter-spacing: .1em;
+    color: var(--gold);
+    margin-bottom: 6px;
+  }
+  .stack-card .tech { font-weight: 600; font-size: 14px; margin-bottom: 4px; }
+  .stack-card .why { font-size: 12px; color: rgba(245,239,226,0.5); line-height: 1.4; }
+
+  /* ── SLIDE 2 — ARCHITECTURE DIAGRAM ── */
+  .arch-diagram {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0;
+  }
+  .arch-row {
+    display: flex;
+    align-items: center;
+    gap: 0;
+  }
+  .arch-box {
+    background: rgba(245,239,226,0.06);
+    border: 1px solid rgba(245,239,226,0.15);
+    border-radius: 10px;
+    padding: 14px 22px;
+    text-align: center;
+    min-width: 160px;
+  }
+  .arch-box.primary { border-color: var(--slate); background: rgba(58,90,120,0.2); }
+  .arch-box.secondary { border-color: var(--awning); background: rgba(47,93,80,0.15); }
+  .arch-box.accent { border-color: var(--gold); background: rgba(217,164,65,0.12); }
+  .arch-box .label {
+    font-family: 'JetBrains Mono';
+    font-size: 9.5px;
+    text-transform: uppercase;
+    letter-spacing: .1em;
+    margin-bottom: 5px;
+    opacity: .55;
+  }
+  .arch-box .name { font-size: 13px; font-weight: 600; }
+  .arch-box .detail { font-size: 11px; color: rgba(245,239,226,0.45); margin-top: 3px; }
+  .arch-arrow {
+    font-size: 18px;
+    color: rgba(245,239,226,0.25);
+    padding: 0 12px;
+  }
+  .arch-arrow.down {
+    padding: 6px 0;
+    display: block;
+    text-align: center;
+  }
+  .services-row {
+    display: flex;
+    gap: 10px;
+    margin-top: 6px;
+  }
+  .service-pill {
+    font-family: 'JetBrains Mono';
+    font-size: 10px;
+    padding: 5px 12px;
+    border-radius: 20px;
+    border: 1px solid rgba(245,239,226,0.12);
+    color: rgba(245,239,226,0.55);
+  }
+  .service-pill.stripe { border-color: rgba(99,91,255,0.4); color: #a8a3ff; }
+  .service-pill.s3 { border-color: rgba(255,153,0,0.4); color: #ffbf47; }
+  .service-pill.socket { border-color: rgba(47,93,80,0.6); color: #6abfa3; }
+  .service-pill.mail { border-color: rgba(166,61,47,0.5); color: #e07a6b; }
+
+  /* ── SLIDE 3 — API ENDPOINTS ── */
+  .api-cols {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+  .api-group {
+    background: rgba(245,239,226,0.04);
+    border: 1px solid rgba(245,239,226,0.1);
+    border-radius: 10px;
+    padding: 16px 18px;
+  }
+  .api-group .group-name {
+    font-family: 'JetBrains Mono';
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: .1em;
+    color: var(--gold);
+    margin-bottom: 10px;
+  }
+  .endpoint {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    margin-bottom: 7px;
+    font-size: 12.5px;
+  }
+  .method {
+    font-family: 'JetBrains Mono';
+    font-size: 9.5px;
+    font-weight: 500;
+    padding: 2px 6px;
+    border-radius: 4px;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+  .method.get { background: rgba(47,93,80,0.25); color: #7dc4a5; }
+  .method.post { background: rgba(58,90,120,0.3); color: #90b8d8; }
+  .method.patch { background: rgba(217,164,65,0.2); color: #d9a441; }
+  .endpoint .path { color: rgba(245,239,226,0.55); font-family: 'JetBrains Mono'; font-size: 11.5px; }
+
+  /* ── SLIDE 4 — LIFECYCLE ── */
+  .lifecycle-flow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0;
+    margin-bottom: 32px;
+  }
+  .lc-state {
+    text-align: center;
+    padding: 14px 20px;
+    border-radius: 10px;
+    border: 1px solid rgba(245,239,226,0.15);
+    background: rgba(245,239,226,0.05);
+    min-width: 110px;
+  }
+  .lc-state .s-label {
+    font-family: 'JetBrains Mono';
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: .08em;
+    margin-bottom: 4px;
+    opacity: .5;
+  }
+  .lc-state .s-name { font-weight: 600; font-size: 13.5px; }
+  .lc-state.active-s { border-color: var(--awning); background: rgba(47,93,80,0.18); }
+  .lc-state.warn { border-color: rgba(217,164,65,0.5); background: rgba(217,164,65,0.1); }
+  .lc-state.danger { border-color: rgba(166,61,47,0.5); background: rgba(166,61,47,0.1); }
+  .lc-arrow {
+    font-size: 18px;
+    color: rgba(245,239,226,0.2);
+    padding: 0 10px;
+  }
+  .lc-notes {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+  }
+  .lc-note {
+    background: rgba(245,239,226,0.04);
+    border: 1px solid rgba(245,239,226,0.09);
+    border-radius: 8px;
+    padding: 14px;
+    font-size: 12.5px;
+    color: rgba(245,239,226,0.6);
+    line-height: 1.5;
+  }
+  .lc-note strong { color: var(--paper); display: block; margin-bottom: 4px; font-size: 13px; }
+
+  /* ── SLIDE 5 — PRICING ── */
+  .pricing-cards {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 18px;
+    margin-bottom: 22px;
+  }
+  .price-card {
+    border-radius: 12px;
+    border: 1px solid rgba(245,239,226,0.12);
+    padding: 24px;
+    background: rgba(245,239,226,0.04);
+    position: relative;
+    overflow: hidden;
+  }
+  .price-card.featured {
+    border-color: var(--gold);
+    background: rgba(217,164,65,0.08);
+  }
+  .price-card .tier-name {
+    font-family: 'JetBrains Mono';
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: .12em;
+    color: rgba(245,239,226,0.5);
+    margin-bottom: 8px;
+  }
+  .price-card.featured .tier-name { color: var(--gold); }
+  .price-card .price { font-family: 'Fraunces'; font-size: 36px; font-weight: 700; margin-bottom: 4px; }
+  .price-card .per { font-size: 12px; color: rgba(245,239,226,0.45); margin-bottom: 16px; }
+  .price-card .feature { font-size: 12.5px; color: rgba(245,239,226,0.6); margin-bottom: 6px; line-height: 1.4; }
+  .price-card .feature::before { content: '✓ '; color: var(--awning); }
+  .free-note {
+    background: rgba(47,93,80,0.15);
+    border: 1px solid rgba(47,93,80,0.35);
+    border-radius: 8px;
+    padding: 14px 18px;
+    font-size: 13px;
+    color: rgba(245,239,226,0.7);
+    line-height: 1.5;
+  }
+  .free-note strong { color: #7dc4a5; }
+
+  /* ── SLIDE 6 — SECURITY ── */
+  .security-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 14px;
+  }
+  .sec-card {
+    background: rgba(245,239,226,0.04);
+    border: 1px solid rgba(245,239,226,0.1);
+    border-radius: 10px;
+    padding: 18px;
+  }
+  .sec-card .icon { font-size: 22px; margin-bottom: 10px; }
+  .sec-card h3 { font-size: 15px; font-family: 'Inter'; font-weight: 600; margin-bottom: 6px; }
+  .sec-card p { font-size: 12.5px; color: rgba(245,239,226,0.55); line-height: 1.5; }
+
+  /* ── SLIDE 7 — BUILD PHASES ── */
+  .phases {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+  .phase {
+    display: flex;
+    gap: 20px;
+    align-items: flex-start;
+    background: rgba(245,239,226,0.04);
+    border: 1px solid rgba(245,239,226,0.1);
+    border-radius: 10px;
+    padding: 18px 22px;
+    position: relative;
+    overflow: hidden;
+  }
+  .phase::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 3px;
+    background: var(--slate);
+  }
+  .phase.p1::before { background: var(--gold); }
+  .phase.p2::before { background: var(--awning); }
+  .phase.p3::before { background: var(--slate); }
+  .phase.p4::before { background: var(--brick); }
+  .phase-num {
+    font-family: 'Fraunces';
+    font-size: 28px;
+    font-weight: 700;
+    opacity: .18;
+    line-height: 1;
+    flex-shrink: 0;
+    min-width: 32px;
+  }
+  .phase-body h3 { font-size: 14.5px; font-family: 'Inter'; font-weight: 600; margin-bottom: 5px; }
+  .phase-body p { font-size: 12.5px; color: rgba(245,239,226,0.55); line-height: 1.5; }
+  .phase-badge {
+    margin-left: auto;
+    flex-shrink: 0;
+    font-family: 'JetBrains Mono';
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: .08em;
+    padding: 4px 10px;
+    border-radius: 20px;
+    border: 1px solid rgba(245,239,226,0.18);
+    color: rgba(245,239,226,0.5);
+    white-space: nowrap;
+    align-self: center;
+  }
+  .phase-badge.now { border-color: var(--gold); color: var(--gold); }
+
+  /* ── SLIDE 8 — END ── */
+  .slide-end {
+    background: radial-gradient(ellipse at 50% 40%, rgba(47,93,80,0.2) 0%, transparent 65%), var(--ink);
+    text-align: center;
+  }
+  .end-big { font-family: 'Fraunces'; font-size: clamp(42px, 6vw, 80px); font-weight: 700; line-height: 1.1;
+    background: linear-gradient(135deg, var(--paper) 40%, rgba(245,239,226,0.45));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    margin-bottom: 18px;
+  }
+  .end-sub { font-size: 15px; color: rgba(245,239,226,0.45); max-width: 480px; margin: 0 auto; line-height: 1.6; }
+  .end-links {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    margin-top: 32px;
+  }
+  .end-link {
+    font-family: 'JetBrains Mono';
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: .1em;
+    padding: 10px 20px;
+    border-radius: 6px;
+    border: 1px solid rgba(245,239,226,0.18);
+    color: rgba(245,239,226,0.6);
+    cursor: default;
+  }
+  .end-link.primary { border-color: var(--gold); color: var(--gold); background: rgba(217,164,65,0.1); }
+</style>
+</head>
+<body>
+
+<div class="progress-bar" id="progressBar"></div>
+
+<div class="deck" id="deck">
+
+  <!-- SLIDE 0: TITLE -->
+  <div class="slide slide-title active" data-index="0">
+    <div class="eyebrow">Architecture Walkthrough · 2026</div>
+    <h1>MainList<br>Backend Design</h1>
+    <p class="sub">A local business marketplace — Ethiopian community directory, bookings, messaging, and subscriptions.</p>
+    <div class="tag-row">
+      <span class="tag gold">Next.js</span>
+      <span class="tag">Node.js + Express</span>
+      <span class="tag">PostgreSQL + PostGIS</span>
+      <span class="tag">Stripe</span>
+      <span class="tag">Socket.io</span>
+      <span class="tag">Prisma ORM</span>
+    </div>
+  </div>
+
+  <!-- SLIDE 1: TECH STACK -->
+  <div class="slide" data-index="1">
+    <div class="slide-content">
+      <div class="slide-header">
+        <div class="num">01 / Tech Stack</div>
+        <h2>Choosing the right tools</h2>
+        <p>Optimized for a small team, fast launch, and low operational overhead.</p>
+      </div>
+      <div class="stack-grid">
+        <div class="stack-card">
+          <div class="layer">Frontend</div>
+          <div class="tech">Next.js (React)</div>
+          <div class="why">SSR for fast listing pages; SEO-critical so businesses are found on Google</div>
+        </div>
+        <div class="stack-card">
+          <div class="layer">Backend</div>
+          <div class="tech">Node.js + Express</div>
+          <div class="why">Same language as frontend, huge ecosystem, easy to hire for</div>
+        </div>
+        <div class="stack-card">
+          <div class="layer">Database</div>
+          <div class="tech">PostgreSQL + PostGIS</div>
+          <div class="why">Relational data + geo search ("plumbers near me") in one engine</div>
+        </div>
+        <div class="stack-card">
+          <div class="layer">ORM</div>
+          <div class="tech">Prisma</div>
+          <div class="why">Type-safe queries, easy migrations, works great with TypeScript</div>
+        </div>
+        <div class="stack-card">
+          <div class="layer">Auth</div>
+          <div class="tech">JWT + Refresh Tokens</div>
+          <div class="why">Standard, secure, supports social login — or swap in Clerk/Auth0 later</div>
+        </div>
+        <div class="stack-card">
+          <div class="layer">Payments</div>
+          <div class="tech">Stripe Billing</div>
+          <div class="why">Handles subscriptions, invoicing, and webhooks out of the box</div>
+        </div>
+        <div class="stack-card">
+          <div class="layer">File Storage</div>
+          <div class="tech">AWS S3 / Cloudflare R2</div>
+          <div class="why">Business photos, logos — cheap, durable, CDN-ready</div>
+        </div>
+        <div class="stack-card">
+          <div class="layer">Real-time</div>
+          <div class="tech">Socket.io</div>
+          <div class="why">In-app chat between customer and business — upgrade to dedicated WS server at scale</div>
+        </div>
+        <div class="stack-card">
+          <div class="layer">Hosting</div>
+          <div class="tech">Vercel + Railway</div>
+          <div class="why">Low ops overhead — Vercel for frontend, Railway for API + DB</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 2: ARCHITECTURE DIAGRAM -->
+  <div class="slide" data-index="2">
+    <div class="slide-content">
+      <div class="slide-header">
+        <div class="num">02 / Architecture</div>
+        <h2>How the pieces connect</h2>
+        <p>A straightforward three-tier architecture — frontend, API, database — with external service integrations.</p>
+      </div>
+      <div class="arch-diagram">
+        <div class="arch-row">
+          <div class="arch-box primary">
+            <div class="label">Client</div>
+            <div class="name">Next.js Web App</div>
+            <div class="detail">Customer + Business dashboards</div>
+          </div>
+          <div class="arch-arrow">⟺</div>
+          <div class="arch-box primary">
+            <div class="label">Server</div>
+            <div class="name">Express REST API</div>
+            <div class="detail">Auth · Listings · Bookings · Billing</div>
+          </div>
+          <div class="arch-arrow">⟺</div>
+          <div class="arch-box secondary">
+            <div class="label">Database</div>
+            <div class="name">PostgreSQL + PostGIS</div>
+            <div class="detail">All relational data + geo index</div>
+          </div>
+        </div>
+        <div class="arch-arrow down" style="font-size:14px; color:rgba(245,239,226,0.15); padding:10px 0;">↕</div>
+        <div class="services-row">
+          <span class="service-pill stripe">Stripe Billing</span>
+          <span class="service-pill s3">S3 / R2 Photos</span>
+          <span class="service-pill socket">Socket.io Chat</span>
+          <span class="service-pill mail">Postmark Email · Twilio SMS</span>
+        </div>
+        <div style="margin-top:24px; display:grid; grid-template-columns:repeat(3,1fr); gap:10px; width:100%;">
+          <div style="background:rgba(245,239,226,0.04); border:1px solid rgba(245,239,226,0.09); border-radius:8px; padding:12px; font-size:12px; color:rgba(245,239,226,0.55);">
+            <div style="font-weight:600; color:var(--paper); margin-bottom:4px;">Vercel</div>
+            Hosts Next.js frontend — global CDN, zero-config deploys
+          </div>
+          <div style="background:rgba(245,239,226,0.04); border:1px solid rgba(245,239,226,0.09); border-radius:8px; padding:12px; font-size:12px; color:rgba(245,239,226,0.55);">
+            <div style="font-weight:600; color:var(--paper); margin-bottom:4px;">Railway / Render</div>
+            Hosts API + managed Postgres — easy scaling, no DevOps required
+          </div>
+          <div style="background:rgba(245,239,226,0.04); border:1px solid rgba(245,239,226,0.09); border-radius:8px; padding:12px; font-size:12px; color:rgba(245,239,226,0.55);">
+            <div style="font-weight:600; color:var(--paper); margin-bottom:4px;">Stripe Webhooks</div>
+            Subscription lifecycle events keep local DB in sync — no polling needed
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 3: API ENDPOINTS -->
+  <div class="slide" data-index="3">
+    <div class="slide-content">
+      <div class="slide-header">
+        <div class="num">03 / API Design</div>
+        <h2>Core REST endpoints</h2>
+        <p>RESTful, resource-oriented routes. All responses return JSON.</p>
+      </div>
+      <div class="api-cols">
+        <div class="api-group">
+          <div class="group-name">Auth</div>
+          <div class="endpoint"><span class="method post">POST</span><span class="path">/auth/register</span></div>
+          <div class="endpoint"><span class="method post">POST</span><span class="path">/auth/login</span></div>
+          <div class="endpoint"><span class="method post">POST</span><span class="path">/auth/refresh</span></div>
+          <div class="endpoint"><span class="method post">POST</span><span class="path">/auth/logout</span></div>
+        </div>
+        <div class="api-group">
+          <div class="group-name">Businesses</div>
+          <div class="endpoint"><span class="method get">GET</span><span class="path">/businesses?city=&cat=&q=</span></div>
+          <div class="endpoint"><span class="method get">GET</span><span class="path">/businesses/:slug</span></div>
+          <div class="endpoint"><span class="method post">POST</span><span class="path">/businesses</span></div>
+          <div class="endpoint"><span class="method patch">PATCH</span><span class="path">/businesses/:id</span></div>
+          <div class="endpoint"><span class="method post">POST</span><span class="path">/businesses/:id/photos</span></div>
+        </div>
+        <div class="api-group">
+          <div class="group-name">Reviews</div>
+          <div class="endpoint"><span class="method get">GET</span><span class="path">/businesses/:id/reviews</span></div>
+          <div class="endpoint"><span class="method post">POST</span><span class="path">/businesses/:id/reviews</span></div>
+          <div class="endpoint"><span class="method post">POST</span><span class="path">/reviews/:id/reply</span></div>
+        </div>
+        <div class="api-group">
+          <div class="group-name">Bookings</div>
+          <div class="endpoint"><span class="method post">POST</span><span class="path">/businesses/:id/bookings</span></div>
+          <div class="endpoint"><span class="method get">GET</span><span class="path">/businesses/:id/bookings</span></div>
+          <div class="endpoint"><span class="method patch">PATCH</span><span class="path">/bookings/:id</span></div>
+        </div>
+        <div class="api-group">
+          <div class="group-name">Messaging</div>
+          <div class="endpoint"><span class="method get">GET</span><span class="path">/conversations</span></div>
+          <div class="endpoint"><span class="method post">POST</span><span class="path">/conversations/:id/messages</span></div>
+          <div class="endpoint" style="gap:8px; font-size:11.5px; color:rgba(245,239,226,0.4);">
+            <span style="font-family:'JetBrains Mono'; font-size:9px; background:rgba(166,61,47,0.25); color:#e07a6b; padding:2px 6px; border-radius:4px; flex-shrink:0; margin-top:2px;">WS</span>
+            <span>conversation:{id} (real-time)</span>
+          </div>
+        </div>
+        <div class="api-group">
+          <div class="group-name">Billing + Admin</div>
+          <div class="endpoint"><span class="method get">GET</span><span class="path">/plans</span></div>
+          <div class="endpoint"><span class="method post">POST</span><span class="path">/subscriptions</span></div>
+          <div class="endpoint"><span class="method post">POST</span><span class="path">/webhooks/stripe</span></div>
+          <div class="endpoint"><span class="method get">GET</span><span class="path">/admin/businesses?status=pending</span></div>
+          <div class="endpoint"><span class="method patch">PATCH</span><span class="path">/admin/businesses/:id/approve</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 4: LISTING LIFECYCLE -->
+  <div class="slide" data-index="4">
+    <div class="slide-content">
+      <div class="slide-header">
+        <div class="num">04 / Listing Lifecycle</div>
+        <h2>How a business goes live</h2>
+        <p>Every listing moves through a moderated state machine before customers can see it.</p>
+      </div>
+      <div class="lifecycle-flow" style="margin-bottom:24px;">
+        <div class="lc-state">
+          <div class="s-label">State 1</div>
+          <div class="s-name">Draft</div>
+        </div>
+        <div class="lc-arrow">→</div>
+        <div class="lc-state warn">
+          <div class="s-label">State 2</div>
+          <div class="s-name">Pending Review</div>
+        </div>
+        <div class="lc-arrow">→</div>
+        <div class="lc-state active-s">
+          <div class="s-label">State 3</div>
+          <div class="s-name">Active</div>
+        </div>
+        <div class="lc-arrow">→</div>
+        <div class="lc-state danger">
+          <div class="s-label">State 4</div>
+          <div class="s-name">Expired / Suspended</div>
+        </div>
+      </div>
+      <div class="lc-notes">
+        <div class="lc-note">
+          <strong>Draft → Pending Review</strong>
+          Owner submits the listing. Goes into an admin moderation queue to prevent spam, fake businesses, or inappropriate content.
+        </div>
+        <div class="lc-note">
+          <strong>Pending → Active</strong>
+          Admin approves. For commercial categories, an active paid subscription is required. Churches &amp; funeral homes skip payment — they go straight to Active.
+        </div>
+        <div class="lc-note">
+          <strong>Active → Expired</strong>
+          Subscription lapses (Stripe webhook fires). Listing is hidden from search. Owner can reactivate by renewing — no data is lost.
+        </div>
+      </div>
+      <div style="margin-top:16px; background:rgba(47,93,80,0.12); border:1px solid rgba(47,93,80,0.3); border-radius:8px; padding:14px 18px; font-size:12.5px; color:rgba(245,239,226,0.65);">
+        <code style="color:#7dc4a5;">categories.is_free_category = TRUE</code> — this DB flag bypasses subscription enforcement entirely. Churches and funeral homes are always free and never expire due to non-payment.
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 5: PRICING -->
+  <div class="slide" data-index="5">
+    <div class="slide-content">
+      <div class="slide-header">
+        <div class="num">05 / Monetization</div>
+        <h2>Pricing tiers</h2>
+        <p>Three tiers cover solo operators through multi-location businesses. Community listings are always free.</p>
+      </div>
+      <div class="pricing-cards">
+        <div class="price-card">
+          <div class="tier-name">Basic</div>
+          <div class="price">$9</div>
+          <div class="per">/ month</div>
+          <div class="feature">1 photo + contact info</div>
+          <div class="feature">Category listing</div>
+          <div class="feature">Visible in search</div>
+        </div>
+        <div class="price-card featured">
+          <div class="tier-name">Featured ★</div>
+          <div class="price">$39</div>
+          <div class="per">/ month</div>
+          <div class="feature">Top-of-category placement</div>
+          <div class="feature">Full photo gallery</div>
+          <div class="feature">Booking calendar</div>
+          <div class="feature">Customer messaging</div>
+        </div>
+        <div class="price-card">
+          <div class="tier-name">Premium</div>
+          <div class="price">$99</div>
+          <div class="per">/ month</div>
+          <div class="feature">Homepage &amp; search priority</div>
+          <div class="feature">Analytics dashboard</div>
+          <div class="feature">Multi-location support</div>
+          <div class="feature">Everything in Featured</div>
+        </div>
+      </div>
+      <div class="free-note">
+        <strong>Churches &amp; Funeral Homes are always free.</strong> These categories are marked <code>is_free_category = TRUE</code> in the database. The app skips subscription enforcement entirely — they never need a payment method and never expire.
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 6: SECURITY -->
+  <div class="slide" data-index="6">
+    <div class="slide-content">
+      <div class="slide-header">
+        <div class="num">06 / Security &amp; Trust</div>
+        <h2>Keeping the platform safe</h2>
+        <p>Trust is the product — especially for home-service and community categories.</p>
+      </div>
+      <div class="security-grid">
+        <div class="sec-card">
+          <div class="icon">⭐</div>
+          <h3>Review Integrity</h3>
+          <p>One review per customer per business — enforced by a unique DB constraint. Reviews can be flagged for moderation via <code>is_flagged</code>. Owner replies are stored alongside the original review.</p>
+        </div>
+        <div class="sec-card">
+          <div class="icon">✓</div>
+          <h3>Business Verification</h3>
+          <p><code>is_verified</code> badge — manually confirmed phone, address, and business license. Especially important for home-service trades and churches where scams are a concern.</p>
+        </div>
+        <div class="sec-card">
+          <div class="icon">🛡</div>
+          <h3>Rate Limiting</h3>
+          <p>Applied on review submission, messaging, and booking requests to prevent spam and abuse. Protects both the platform and business owners from fake interactions.</p>
+        </div>
+        <div class="sec-card">
+          <div class="icon">🔒</div>
+          <h3>PII Protection</h3>
+          <p>Customer phone and email are only visible to a business <em>after</em> a booking or message is initiated — never exposed in public search results or listing pages.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 7: BUILD PHASES -->
+  <div class="slide" data-index="7">
+    <div class="slide-content">
+      <div class="slide-header">
+        <div class="num">07 / Build Roadmap</div>
+        <h2>MVP → Full marketplace</h2>
+        <p>Ship revenue-generating features first. Each phase is independently deployable.</p>
+      </div>
+      <div class="phases">
+        <div class="phase p1">
+          <div class="phase-num">1</div>
+          <div class="phase-body">
+            <h3>MVP — Ship &amp; Start Earning</h3>
+            <p>Auth, business listings (CRUD), category browse + search, Stripe Basic / Featured / Premium subscriptions. Everything needed to onboard businesses and collect recurring revenue.</p>
+          </div>
+          <div class="phase-badge now">Start Here</div>
+        </div>
+        <div class="phase p2">
+          <div class="phase-num">2</div>
+          <div class="phase-body">
+            <h3>Reviews, Photos &amp; Geo Search</h3>
+            <p>Customer reviews and ratings (with the auto-updating trigger), full photo galleries for Featured+ plans, and PostGIS "near me" distance search.</p>
+          </div>
+          <div class="phase-badge">Phase 2</div>
+        </div>
+        <div class="phase p3">
+          <div class="phase-num">3</div>
+          <div class="phase-body">
+            <h3>Messaging, Bookings &amp; Notifications</h3>
+            <p>In-app customer↔business messaging (Socket.io), booking/quote request flow, email + SMS notifications via Postmark and Twilio.</p>
+          </div>
+          <div class="phase-badge">Phase 3</div>
+        </div>
+        <div class="phase p4">
+          <div class="phase-num">4</div>
+          <div class="phase-body">
+            <h3>Admin Tools &amp; Premium Analytics</h3>
+            <p>Moderation dashboard for listing approval, suspension, and fraud review. Analytics for Premium tier (profile views, booking conversion, search rank).</p>
+          </div>
+          <div class="phase-badge">Phase 4</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 8: END -->
+  <div class="slide slide-end" data-index="8">
+    <div class="end-big">Ready to build.</div>
+    <p class="end-sub">Schema is written. Architecture is decided. Phase 1 is the next step — scaffold Next.js, wire Prisma to the schema, and ship auth + listings.</p>
+    <div class="end-links">
+      <div class="end-link primary">schema.sql — done</div>
+      <div class="end-link">backend-architecture.md — done</div>
+      <div class="end-link">owner-dashboard-mockup.html — done</div>
+    </div>
+  </div>
+
+</div>
+
+<!-- NAV -->
+<div class="nav">
+  <button id="btnPrev" onclick="go(-1)" disabled>&#8592;</button>
+  <div class="dot-nav" id="dotNav"></div>
+  <span class="slide-counter" id="counter">1 / 9</span>
+  <button id="btnNext" onclick="go(1)">&#8594;</button>
+</div>
+
+<script>
+  const slides = document.querySelectorAll('.slide');
+  const total = slides.length;
+  let current = 0;
+
+  const bar = document.getElementById('progressBar');
+  const counter = document.getElementById('counter');
+  const btnPrev = document.getElementById('btnPrev');
+  const btnNext = document.getElementById('btnNext');
+  const dotNav = document.getElementById('dotNav');
+
+  // Build dots
+  slides.forEach((_, i) => {
+    const d = document.createElement('div');
+    d.className = 'dot' + (i === 0 ? ' on' : '');
+    d.onclick = () => goTo(i);
+    dotNav.appendChild(d);
+  });
+
+  function update() {
+    slides.forEach((s, i) => {
+      s.classList.remove('active', 'exit');
+    });
+    slides[current].classList.add('active');
+    bar.style.width = ((current + 1) / total * 100) + '%';
+    counter.textContent = (current + 1) + ' / ' + total;
+    btnPrev.disabled = current === 0;
+    btnNext.disabled = current === total - 1;
+    document.querySelectorAll('.dot').forEach((d, i) => d.classList.toggle('on', i === current));
+  }
+
+  function go(dir) {
+    const next = current + dir;
+    if (next < 0 || next >= total) return;
+    slides[current].classList.add('exit');
+    setTimeout(() => slides[current === next ? next : current].classList.remove('exit'), 400);
+    current = next;
+    update();
+  }
+
+  function goTo(i) {
+    if (i === current) return;
+    slides[current].classList.add('exit');
+    setTimeout(() => slides[current === i ? i : current].classList.remove('exit'), 400);
+    current = i;
+    update();
+  }
+
+  document.addEventListener('keydown', e => {
+    if (e.key === 'ArrowRight' || e.key === 'ArrowDown') go(1);
+    if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') go(-1);
+  });
+
+  update();
+</script>
+</body>
+</html>

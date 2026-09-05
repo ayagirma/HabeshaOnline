@@ -1,0 +1,137 @@
+/* ── Design tokens ──────────────────────────────────────────────────
+   Palette is drawn from the subject: coffee-green ink, an oat canvas
+   the colour of unbleached cotton, saffron for actions, berbere red and
+   enset green for the woven tibeb band. Every token is declared here in
+   bare :root; the theme blocks below only redefine values.            */
+
+:root {
+  color-scheme: light dark;
+
+  /* ground + ink */
+  --canvas:      #EFECE3;
+  --surface:     #FFFFFF;
+  --surface-2:   #F7F4ED;
+  --ink:         #14211B;
+  --ink-2:       #3B4740;
+  --muted:       #6C7369;
+  --line:        #DCD7CB;
+  --line-soft:   #E7E3D9;
+
+  /* brand */
+  --accent:      #D4901A;   /* saffron — primary action */
+  --accent-deep: #A6650B;
+  --accent-soft: #F7E6C4;
+  --on-accent:   #17110A;
+  --berbere:     #A83418;   /* second thread of the band */
+  --enset:       #1F5B3E;   /* third thread */
+
+  /* semantic, kept apart from the accent hue */
+  --ok:          #22694A;
+  --ok-soft:     #DCEDE2;
+  --warn:        #8A6112;
+  --warn-soft:   #F6E9C8;
+  --bad:         #9B2C16;
+  --bad-soft:    #F5DED8;
+
+  --header-bg:   #14211B;
+  --header-ink:  #F2EFE6;
+  --header-mut:  #A9B3A9;
+
+  /* form */
+  --field-bg:    #FFFFFF;
+  --field-line:  #CFC9BB;
+  --focus:       #1F5B3E;
+
+  /* type */
+  --f-display: "Bricolage Grotesque", "Instrument Sans", ui-sans-serif, system-ui, sans-serif;
+  --f-ui:      "Instrument Sans", ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --f-geez:    "Noto Sans Ethiopic", "Abyssinica SIL", serif;
+
+  /* scale */
+  --s1: 4px;  --s2: 8px;  --s3: 12px; --s4: 16px;
+  --s5: 24px; --s6: 32px; --s7: 48px; --s8: 72px;
+
+  --r-sm: 6px; --r-md: 10px; --r-lg: 16px; --r-pill: 999px;
+
+  --shadow-card: 0 1px 2px rgba(20,33,27,.06), 0 8px 24px -18px rgba(20,33,27,.5);
+  --shadow-pop:  0 12px 40px -12px rgba(20,33,27,.34);
+
+  --wrap: 1180px;
+  --topbar-h: 62px;
+}
+
+/* System-dark: applies unless the viewer explicitly chose light. */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --canvas:      #12160F;
+    --surface:     #1A1F18;
+    --surface-2:   #212719;
+    --ink:         #EAE7DA;
+    --ink-2:       #C3C4B6;
+    --muted:       #949686;
+    --line:        #2F3729;
+    --line-soft:   #262D21;
+
+    --accent:      #E7A93C;
+    --accent-deep: #F0C275;
+    --accent-soft: #3A2C11;
+    --on-accent:   #17110A;
+    --berbere:     #E08163;
+    --enset:       #63B98C;
+
+    --ok:          #78C79A;
+    --ok-soft:     #1B3427;
+    --warn:        #E3B75E;
+    --warn-soft:   #382D10;
+    --bad:         #E8836B;
+    --bad-soft:    #3A1E17;
+
+    --header-bg:   #0D1109;
+    --header-ink:  #EDE9DC;
+    --header-mut:  #8E9585;
+
+    --field-bg:    #10140E;
+    --field-line:  #3A4333;
+    --focus:       #63B98C;
+
+    --shadow-card: 0 1px 2px rgba(0,0,0,.5), 0 10px 26px -20px #000;
+    --shadow-pop:  0 16px 44px -14px rgba(0,0,0,.7);
+  }
+}
+
+/* Explicit dark choice wins over a light OS. */
+:root[data-theme="dark"] {
+  --canvas:      #12160F;
+  --surface:     #1A1F18;
+  --surface-2:   #212719;
+  --ink:         #EAE7DA;
+  --ink-2:       #C3C4B6;
+  --muted:       #949686;
+  --line:        #2F3729;
+  --line-soft:   #262D21;
+
+  --accent:      #E7A93C;
+  --accent-deep: #F0C275;
+  --accent-soft: #3A2C11;
+  --on-accent:   #17110A;
+  --berbere:     #E08163;
+  --enset:       #63B98C;
+
+  --ok:          #78C79A;
+  --ok-soft:     #1B3427;
+  --warn:        #E3B75E;
+  --warn-soft:   #382D10;
+  --bad:         #E8836B;
+  --bad-soft:    #3A1E17;
+
+  --header-bg:   #0D1109;
+  --header-ink:  #EDE9DC;
+  --header-mut:  #8E9585;
+
+  --field-bg:    #10140E;
+  --field-line:  #3A4333;
+  --focus:       #63B98C;
+
+  --shadow-card: 0 1px 2px rgba(0,0,0,.5), 0 10px 26px -20px #000;
+  --shadow-pop:  0 16px 44px -14px rgba(0,0,0,.7);
+}
