@@ -3,7 +3,7 @@ import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { photoUrl } from "@/lib/photo";
 import { money, tierFor } from "@/lib/listing";
-import { PAY } from "@/lib/pay";
+import { PAY, payCode } from "@/lib/pay";
 import {
   approveListing,
   blockUser,
@@ -236,9 +236,9 @@ export default async function AdminPage() {
         <div className="block-head">
           <h2>Awaiting payment</h2>
           <p className="block-sub">
-            Paid plans send the fee by Cash App ({PAY.cashapp}) or Zelle ({PAY.zelle}). When you
-            see it land — match it by the ad&rsquo;s title in the note — mark it paid to put the ad
-            live.
+            Paid plans send the fee by Cash App ({PAY.cashapp}) or Zelle ({PAY.zelle}). Each seller
+            is told to put a code like <span className="pay-code">HO-XXXXXX</span> in the payment
+            note — match that to the row below, then mark it paid to put the ad live.
           </p>
         </div>
         {awaitingPayment.length === 0 ? (
@@ -269,7 +269,8 @@ export default async function AdminPage() {
                     </div>
                   )}
                   <p className="msg-body">
-                    {tierFor(l.tier).name.en} plan — <strong>{money(owed)} owed</strong>
+                    {tierFor(l.tier).name.en} plan — <strong>{money(owed)} owed</strong> · look for
+                    note <span className="pay-code">{payCode(l.id)}</span>
                   </p>
                   <p className="msg-contact">
                     Seller: @{seller?.handle} ({seller?.display_name})

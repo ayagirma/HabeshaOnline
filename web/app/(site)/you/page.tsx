@@ -1,7 +1,8 @@
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
-import { catFor, priceLabel } from "@/lib/listing";
+import { catFor, money, priceLabel, tierFor } from "@/lib/listing";
 import { photoUrl } from "@/lib/photo";
+import { PAY, payCode } from "@/lib/pay";
 import { AuthForm } from "./AuthForm";
 import { ProfileForm } from "./ProfileForm";
 import { signOutAction, deleteListing } from "./actions";
@@ -20,6 +21,7 @@ type MyListing = {
   title_en: string;
   price: number;
   unit: string;
+  tier: string;
   status: string;
   payment_status: string;
   created_at: string;
@@ -52,7 +54,7 @@ export default async function YouPage() {
     supabase
       .from("listings")
       .select(
-        "id, category, title_en, price, unit, status, payment_status, created_at, listing_photos(storage_path, sort_order)",
+        "id, category, title_en, price, unit, tier, status, payment_status, created_at, listing_photos(storage_path, sort_order)",
       )
       .eq("seller_id", user.id)
       .order("created_at", { ascending: false }),
@@ -168,6 +170,13 @@ export default async function YouPage() {
                     : (STATUS_LABEL[l.status] ?? l.status)}
                 </span>
               </p>
+              {l.payment_status === "pending" && (
+                <p className="msg-contact">
+                  Send {money(tierFor(l.tier).usd)} by Cash App ({PAY.cashapp}) or Zelle ({PAY.zelle}),
+                  with note <span className="pay-code">{payCode(l.id)}</span>. Goes live once we
+                  confirm it.
+                </p>
+              )}
               <form action={deleteListing.bind(null, l.id)}>
                 <button className="link-btn" type="submit" style={{ color: "var(--bad)" }}>
                   Delete

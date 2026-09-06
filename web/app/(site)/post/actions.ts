@@ -2,8 +2,9 @@
 
 import { createClient } from "@/lib/supabase/server";
 import { CATS, CITIES, TIERS, UNITS, tierFor } from "@/lib/listing";
+import { payCode } from "@/lib/pay";
 
-type Result = { ok: true } | { error: string };
+type Result = { ok: true; ref?: string } | { error: string };
 
 const DAY = 86_400_000;
 const MAX_PER_DAY = 5;
@@ -114,5 +115,7 @@ export async function createListing(formData: FormData): Promise<Result> {
     if (photoErr) console.error("listing_photos insert failed:", photoErr.message);
   }
 
-  return { ok: true };
+  // Paid plan → hand back the reference code the seller puts in the
+  // Cash App / Zelle note so an admin can match the transfer.
+  return tierFor(tier).usd > 0 ? { ok: true, ref: payCode(created.id) } : { ok: true };
 }

@@ -13,3 +13,11 @@ export const PAY = {
 export function payConfigured(): boolean {
   return Boolean(process.env.NEXT_PUBLIC_PAY_CASHAPP || process.env.NEXT_PUBLIC_PAY_ZELLE);
 }
+
+/* A short code the seller puts in the Cash App / Zelle note, so an admin
+   can match "$5 landed from someone" to one exact listing in the
+   Awaiting-payment queue. Derived from the listing id — no extra column,
+   and it's stable for the life of the listing. */
+export function payCode(listingId: string): string {
+  return "HO-" + listingId.replace(/-/g, "").slice(0, 6).toUpperCase();
+}

@@ -258,11 +258,13 @@ export const STR: Record<string, Row> = {
   },
   "pay.cashapp": { en: "Cash App", am: "Cash App" },
   "pay.zelle": { en: "Zelle", am: "Zelle" },
+  "pay.noteLabel": { en: "Put this in the payment note", am: "ይህንን በክፍያው ማስታወሻ ላይ ያስገቡ" },
   "pay.matchNote": {
-    en: "Put your ad's title in the payment note so we can match it to your listing.",
-    am: "ከማስታወቂያዎ ጋር እንድናዛምደው የማስታወቂያዎን ርዕስ በክፍያው ማስታወሻ ላይ ያስቀምጡ።",
+    en: "The code in the payment note is how we match your transfer to this exact listing. Without it, approval takes longer.",
+    am: "በክፍያው ማስታወሻ ላይ ያለው ኮድ ክፍያዎን ከዚህ ማስታወቂያ ጋር የምናዛምድበት መንገድ ነው። ከሌለ ማጽደቁ ረዘም ይላል።",
   },
   "pay.pendingBadge": { en: "Payment pending", am: "ክፍያ በመጠባበቅ ላይ" },
+  "pay.refShort": { en: "Payment code", am: "የክፍያ ኮድ" },
 
   "checkout.title": { en: "Checkout", am: "ክፍያ" },
   "checkout.demo": {

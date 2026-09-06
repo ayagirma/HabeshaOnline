@@ -15,6 +15,7 @@ export function PostForm({ sellerName }: { sellerName: string }) {
   const { t, tt } = useLang();
   const [error, setError] = useState<string | null>(null);
   const [done, setDone] = useState(false);
+  const [payRef, setPayRef] = useState<string | null>(null);
   const [pending, startTransition] = useTransition();
   const [now] = useState(() => Date.now());
 
@@ -56,7 +57,10 @@ export function PostForm({ sellerName }: { sellerName: string }) {
     startTransition(async () => {
       const result = await createListing(formData);
       if ("error" in result) setError(t(result.error));
-      else setDone(true);
+      else {
+        setPayRef(result.ref ?? null);
+        setDone(true);
+      }
     });
   }
 
@@ -83,6 +87,12 @@ export function PostForm({ sellerName }: { sellerName: string }) {
                 <span className="pay-handle">{PAY.zelle}</span>
               </div>
             </div>
+            {payRef && (
+              <div className="pay-ref">
+                <span className="pay-label">{t("pay.noteLabel")}</span>
+                <strong>{payRef}</strong>
+              </div>
+            )}
             <p className="hint">{t("pay.matchNote")}</p>
           </div>
         ) : (
