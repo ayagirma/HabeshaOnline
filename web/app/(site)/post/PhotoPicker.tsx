@@ -17,6 +17,7 @@ type Item = {
   localUrl: string;
   path: string | null;
   status: "up" | "ok" | "err";
+  err?: string;
 };
 
 /* Photos are shrunk on the seller's device (lib/shrink.ts) and uploaded
@@ -45,13 +46,24 @@ export function PhotoPicker({
     });
   }
 
+  function reason(e: unknown): string {
+    const msg = e instanceof Error ? e.message : String(e);
+    if (msg === "too-large") return t("post.tooBig");
+    if (msg === "decode" || msg === "encode") return t("post.photoType");
+    return msg || t("post.photoBad");
+  }
+
   async function addFiles(files: FileList | null) {
     if (!files || !files.length || busy) return;
     const supabase = createClient();
     const {
       data: { user },
+      error: authErr,
     } = await supabase.auth.getUser();
-    if (!user) return;
+    if (!user) {
+      console.error("photo upload: not signed in", authErr);
+      return;
+    }
 
     const room = Math.max(0, max - items.length);
     const chosen = Array.from(files).slice(0, room);
@@ -80,9 +92,11 @@ export function PhotoPicker({
         current = current.map((it) =>
           it.key === seed.key ? { ...it, path, status: "ok" as const } : it,
         );
-      } catch {
+      } catch (e) {
+        console.error("photo upload failed:", e);
+        const err = reason(e);
         current = current.map((it) =>
-          it.key === seed.key ? { ...it, status: "err" as const } : it,
+          it.key === seed.key ? { ...it, status: "err" as const, err } : it,
         );
       }
       setItems(current);
@@ -105,6 +119,7 @@ export function PhotoPicker({
 
   const full = items.length >= max;
   const coverKey = items.find((i) => i.status === "ok")?.key;
+  const firstError = items.find((i) => i.status === "err")?.err;
 
   return (
     <div className="field">
@@ -148,6 +163,7 @@ export function PhotoPicker({
           </button>
         )}
       </div>
+      {firstError && <p className="note note-bad">{firstError}</p>}
       <span className="hint">{t("post.photoHint", { n: String(max) })}</span>
       <input
         ref={inputRef}

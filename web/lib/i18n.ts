@@ -183,6 +183,10 @@ export const STR: Record<string, Row> = {
   "post.photoUploading": { en: "Uploading…", am: "በመስቀል ላይ…" },
   "post.photoCover": { en: "Cover", am: "ሽፋን" },
   "post.photoBad": { en: "Couldn't add", am: "አልተጨመረም" },
+  "post.photoType": {
+    en: "Couldn't read that image. iPhone photos are often HEIC — set the camera to \"Most Compatible\", or pick a JPG or PNG.",
+    am: "ያንን ምስል ማንበብ አልተቻለም። የ iPhone ፎቶዎች ብዙ ጊዜ HEIC ናቸው — ካሜራውን ወደ \"Most Compatible\" ያድርጉ፣ ወይም JPG ወይም PNG ይምረጡ።",
+  },
   "post.errPhotos": {
     en: "One of the photos didn't upload. Remove it and try again.",
     am: "ከፎቶዎቹ አንዱ አልተሰቀለም። አውጥተው እንደገና ይሞክሩ።",
