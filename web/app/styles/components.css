@@ -1,7 +1,7 @@
 /* ── Buttons ──────────────────────────────────────────────────────── */
 .btn {
   border: 1px solid transparent; border-radius: var(--r-md);
-  padding: 9px 16px; font-weight: 600; font-size: 14px;
+  padding: 9px 16px; font-weight: 600; font-size: 14px; text-decoration: none;
   display: inline-flex; align-items: center; justify-content: center; gap: 8px;
   transition: background-color .15s, border-color .15s, transform .06s;
 }
@@ -325,6 +325,28 @@
   border: 1px dashed var(--line); border-radius: var(--r-lg);
   color: var(--muted); display: grid; gap: var(--s4); justify-items: center;
 }
+
+/* Full-page 404 / error (app/not-found.tsx, app/error.tsx) */
+.errpage {
+  min-height: 62vh; max-width: 30rem; margin: 0 auto;
+  display: grid; place-content: center; justify-items: center;
+  text-align: center; gap: var(--s4); padding: var(--s7) var(--s4);
+}
+.errpage .band {
+  width: 72px; height: 8px; border-radius: var(--r-pill);
+  background:
+    repeating-linear-gradient(135deg, var(--accent) 0 4px, transparent 4px 8px),
+    repeating-linear-gradient(45deg, var(--berbere) 0 4px, transparent 4px 8px),
+    var(--enset);
+}
+.errpage .eyebrow {
+  font-family: var(--f-display); font-weight: 700;
+  font-size: 12.5px; letter-spacing: .12em; text-transform: uppercase;
+  color: var(--muted);
+}
+.errpage h1 { font-family: var(--f-display); font-size: clamp(22px, 4vw, 30px); line-height: 1.2; }
+.errpage p { color: var(--muted); font-size: 15px; line-height: 1.65; }
+.errpage .acts { display: flex; flex-wrap: wrap; gap: var(--s3); justify-content: center; margin-top: var(--s2); }
 
 .fineprint { color: var(--muted); font-size: 12.5px; text-align: center; margin-top: var(--s5); }
 
