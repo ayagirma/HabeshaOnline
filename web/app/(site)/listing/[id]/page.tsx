@@ -8,6 +8,7 @@ import { LangText } from "./LangText";
 import { InquiryForm } from "./InquiryForm";
 import { SellerContact } from "./SellerContact";
 import { Gallery } from "./Gallery";
+import { PostedDate } from "./PostedDate";
 
 type Row = {
   id: string;
@@ -66,12 +67,6 @@ export default async function ListingPage({ params }: { params: Promise<{ id: st
     .slice()
     .sort((a, b) => a.sort_order - b.sort_order)
     .map((p) => photoUrl(p.storage_path));
-  const posted = new Date(listing.createdAt).toLocaleDateString(undefined, {
-    month: "short",
-    day: "numeric",
-    year: "numeric",
-  });
-
   return (
     <main id="main">
       <Link className="back" href="/">
@@ -103,7 +98,7 @@ export default async function ListingPage({ params }: { params: Promise<{ id: st
               <span className="dot">·</span>
               <span>📍 {listing.place}</span>
               <span className="dot">·</span>
-              <span>Posted {posted}</span>
+              <PostedDate ms={listing.createdAt} />
             </div>
           </div>
 
