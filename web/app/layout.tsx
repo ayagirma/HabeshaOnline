@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import { Bricolage_Grotesque, Instrument_Sans } from "next/font/google";
+import { Analytics } from "@vercel/analytics/next";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import { LanguageProvider } from "@/lib/i18n-context";
 import { TabBar } from "./TabBar";
 import "./globals.css";
@@ -31,6 +33,10 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           {children}
           <TabBar />
         </LanguageProvider>
+        {/* Cookieless — no consent banner needed. Both are no-ops until
+            enabled in the Vercel dashboard (Analytics / Speed Insights tabs). */}
+        <Analytics />
+        <SpeedInsights />
       </body>
     </html>
   );
