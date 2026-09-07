@@ -75,7 +75,7 @@ export default function PrivacyPage() {
         <h3>Changes and contact</h3>
         <p>
           We may update this notice; the date above changes when we do. Questions:{" "}
-          <a href="mailto:hello@habeshaonline.com">hello@habeshaonline.com</a>.
+          <a href="mailto:hello@habesha-online.com">hello@habesha-online.com</a>.
         </p>
       </div>
     </main>

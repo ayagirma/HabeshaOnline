@@ -17,6 +17,7 @@ const instrument = Instrument_Sans({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://habesha-online.com"),
   title: "HabeshaOnline",
   description:
     "A community marketplace for the Ethiopian and Eritrean community in Colorado.",

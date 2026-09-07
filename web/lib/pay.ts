@@ -7,7 +7,7 @@
 
 export const PAY = {
   cashapp: process.env.NEXT_PUBLIC_PAY_CASHAPP || "$HabeshaOnline",
-  zelle: process.env.NEXT_PUBLIC_PAY_ZELLE || "pay@habeshaonline.com",
+  zelle: process.env.NEXT_PUBLIC_PAY_ZELLE || "pay@habesha-online.com",
 };
 
 export function payConfigured(): boolean {
