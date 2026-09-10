@@ -98,6 +98,7 @@ export const STR: Record<string, Row> = {
 
   "card.sample": { en: "Sample", am: "ናሙና" },
   "card.photo": { en: "Photo", am: "ፎቶ" },
+  "card.sponsored": { en: "Sponsored", am: "የተከፈለበት" },
   "card.featured": { en: "Featured", am: "ተለይቷል" },
   "card.video": { en: "Video", am: "ቪዲዮ" },
   "card.yours": { en: "Yours", am: "የእርስዎ" },
@@ -173,6 +174,12 @@ export const STR: Record<string, Row> = {
   "post.pricePh": { en: "1800", am: "1800" },
   "post.priceUnit": { en: "Per", am: "በ" },
   "post.city": { en: "City", am: "ከተማ" },
+  "post.promoNote": {
+    en: "Ads & Promotions run as a paid placement — no price or city to fill in, just where people should go.",
+    am: "ማስታወቂያዎች እንደ ተከፋይ ቦታ ይሰራሉ — ዋጋ ወይም ከተማ መሙላት አያስፈልግም፣ ሰዎች የሚሄዱበትን ብቻ ያስገቡ።",
+  },
+  "post.linkUrl": { en: "Website or link", am: "ድህረ ገጽ ወይም አገናኝ" },
+  "post.linkUrlPh": { en: "https://yourbusiness.com", am: "https://yourbusiness.com" },
   "post.method": { en: "Reply by", am: "መልስ በ" },
   "post.contact": { en: "Phone or email", am: "ስልክ ወይም ኢሜይል" },
   "post.photoHint": {
@@ -217,6 +224,14 @@ export const STR: Record<string, Row> = {
   "post.errTitle": { en: "Give the ad a title.", am: "ለማስታወቂያው ርዕስ ይስጡ።" },
   "post.errPrice": { en: "Add a price, or choose “Call for quote”.", am: "ዋጋ ይጨምሩ ወይም “ዋጋ ይጠይቁ” ይምረጡ።" },
   "post.errContact": { en: "Buyers need a way to reach you.", am: "ገዢዎች የሚያገኙዎት መንገድ ያስፈልጋቸዋል።" },
+  "post.errLink": {
+    en: "Add a valid website link (starting with https://).",
+    am: "ትክክለኛ የድህረ ገጽ አገናኝ ያክሉ (በ https:// የሚጀምር)።",
+  },
+  "post.errPromoFree": {
+    en: "Ads & Promotions need a paid plan — pick Standard or above.",
+    am: "ማስታወቂያዎች ተከፋይ እቅድ ያስፈልጋቸዋል — መደበኛ ወይም ከዚያ በላይ ይምረጡ።",
+  },
   "post.agree": {
     en: "I confirm this listing is accurate and I'm responsible for its content.",
     am: "ይህ ማስታወቂያ ትክክለኛ መሆኑን አረጋግጣለሁ፣ ለይዘቱም ኃላፊነት እወስዳለሁ።",

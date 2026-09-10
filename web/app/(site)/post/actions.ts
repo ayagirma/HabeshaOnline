@@ -1,7 +1,7 @@
 "use server";
 
 import { createClient } from "@/lib/supabase/server";
-import { CATS, CITIES, TIERS, UNITS, tierFor } from "@/lib/listing";
+import { CATS, CITIES, TIERS, UNITS, isPromoCategory, tierFor } from "@/lib/listing";
 import { payCode } from "@/lib/pay";
 
 type Result = { ok: true; ref?: string } | { error: string };
@@ -53,21 +53,39 @@ export async function createListing(formData: FormData): Promise<Result> {
   const title = String(formData.get("title") || "").trim();
   const desc = String(formData.get("desc") || "").trim();
   const category = String(formData.get("category") || "");
-  const unit = String(formData.get("unit") || "total");
   const tier = String(formData.get("tier") || "free");
-  const place = String(formData.get("place") || "");
-  const priceRaw = String(formData.get("price") || "").trim();
   const agree = formData.get("agree") === "on";
 
   if (!title) return { error: "post.errTitle" };
   if (!CAT_KEYS.has(category)) return { error: "post.errTitle" };
-  if (!UNIT_KEYS.has(unit)) return { error: "post.errPrice" };
   if (!TIER_KEYS.has(tier)) return { error: "post.errTitle" };
-  if (!CITY_SET.has(place)) return { error: "post.errTitle" };
   if (!agree) return { error: "post.errAgree" };
 
-  const price = unit === "quote" ? 0 : Number(priceRaw);
-  if (unit !== "quote" && !(price > 0)) return { error: "post.errPrice" };
+  const isPromo = isPromoCategory(category);
+
+  let unit = "total";
+  let place = "";
+  let price = 0;
+  let linkUrl: string | null = null;
+
+  if (isPromo) {
+    // A paid placement, not a classified listing — no price, no city.
+    if (tierFor(tier).usd <= 0) return { error: "post.errPromoFree" };
+    linkUrl = String(formData.get("linkUrl") || "").trim();
+    if (linkUrl && !/^https?:\/\//i.test(linkUrl)) linkUrl = `https://${linkUrl}`;
+    if (!linkUrl || linkUrl.length > 300 || !/^https?:\/\/[^\s]+\.[^\s]+/i.test(linkUrl)) {
+      return { error: "post.errLink" };
+    }
+  } else {
+    unit = String(formData.get("unit") || "total");
+    place = String(formData.get("place") || "");
+    if (!UNIT_KEYS.has(unit)) return { error: "post.errPrice" };
+    if (!CITY_SET.has(place)) return { error: "post.errTitle" };
+
+    const priceRaw = String(formData.get("price") || "").trim();
+    price = unit === "quote" ? 0 : Number(priceRaw);
+    if (unit !== "quote" && !(price > 0)) return { error: "post.errPrice" };
+  }
 
   // Daily cap — count this seller's listings created in the last 24h.
   const since = new Date(Date.now() - DAY).toISOString();
@@ -94,6 +112,7 @@ export async function createListing(formData: FormData): Promise<Result> {
       unit,
       place,
       tier,
+      link_url: linkUrl,
       expires_at: new Date(Date.now() + days * DAY).toISOString(),
     })
     .select("id")

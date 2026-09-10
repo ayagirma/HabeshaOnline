@@ -3,7 +3,7 @@
 import { useSyncExternalStore } from "react";
 import Link from "next/link";
 import { useLang } from "@/lib/i18n-context";
-import { artFor, catFor, priceLabel, timeAgo, type ListingLike } from "@/lib/listing";
+import { artFor, catFor, isPromoCategory, priceLabel, timeAgo, type ListingLike } from "@/lib/listing";
 
 const SAVED_KEY = "ho.saved.v1";
 
@@ -70,8 +70,14 @@ export function Card({ listing }: { listing: ListingLike }) {
           <div className="card-cat">{tt(catFor(listing.cat))}</div>
           <h3 className="card-title">{tt(listing.title)}</h3>
           <div className="card-meta">
-            <span className="price">{priceLabel(listing, lang)}</span>
-            <span className="place">{listing.place}</span>
+            {isPromoCategory(listing.cat) ? (
+              <span className="place">{t("card.sponsored")}</span>
+            ) : (
+              <>
+                <span className="price">{priceLabel(listing, lang)}</span>
+                <span className="place">{listing.place}</span>
+              </>
+            )}
           </div>
           <div className="card-foot">
             <span>{listing.seller}</span>

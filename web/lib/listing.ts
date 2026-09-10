@@ -18,8 +18,16 @@ export const CATS: Category[] = [
   { key: "jobs", ico: "💼", en: "Jobs", am: "ስራ" },
   { key: "events", ico: "🎟️", en: "Events", am: "ዝግጅቶች" },
   { key: "community", ico: "📰", en: "Community", am: "ማህበረሰብ" },
+  { key: "promo", ico: "📣", en: "Ads & Promotions", am: "ማስታወቂያ" },
   { key: "other", ico: "🗂️", en: "Other", am: "ሌላ" },
 ];
+
+/* A paid placement for an outside business/app/service — no price, no
+   city, just a link. Not a classified listing, so it skips the fields
+   that assume one (see PostForm/actions and the display components). */
+export function isPromoCategory(cat: string): boolean {
+  return cat === "promo";
+}
 
 export const CITIES = [
   "Denver, CO",
@@ -160,6 +168,7 @@ export type ListingLike = {
   createdAt: number;
   sample?: boolean;
   status?: string;
+  linkUrl?: string | null;
 };
 
 export function artFor(l: ListingLike): string {

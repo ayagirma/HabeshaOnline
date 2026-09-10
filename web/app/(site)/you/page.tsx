@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
-import { catFor, money, priceLabel, tierFor } from "@/lib/listing";
+import { catFor, isPromoCategory, money, priceLabel, tierFor } from "@/lib/listing";
 import { photoUrl } from "@/lib/photo";
 import { PAY, payCode } from "@/lib/pay";
 import { AuthForm } from "./AuthForm";
@@ -154,7 +154,8 @@ export default async function YouPage() {
                 </div>
               )}
               <p className="msg-body">
-                {catFor(l.category).en} · {priceLabel(l, "en")}{" "}
+                {catFor(l.category).en}
+                {!isPromoCategory(l.category) && <> · {priceLabel(l, "en")}</>}{" "}
                 <span
                   className={`badge ${
                     l.status === "active"

@@ -3,7 +3,7 @@ import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { photoUrl } from "@/lib/photo";
 import { Logo } from "@/app/Logo";
-import { money, tierFor } from "@/lib/listing";
+import { isPromoCategory, money, tierFor } from "@/lib/listing";
 import { PAY, payCode } from "@/lib/pay";
 import {
   approveListing,
@@ -28,6 +28,7 @@ type PendingListing = {
   price: number;
   tier: string;
   payment_status: string;
+  link_url: string | null;
   created_at: string;
   profiles: Profile;
   listing_photos: { storage_path: string; sort_order: number }[] | null;
@@ -92,7 +93,7 @@ export default async function AdminPage() {
     supabase
       .from("listings")
       .select(
-        "id, title_en, category, price, tier, payment_status, created_at, profiles(handle, display_name), listing_photos(storage_path, sort_order)",
+        "id, title_en, category, price, tier, payment_status, link_url, created_at, profiles(handle, display_name), listing_photos(storage_path, sort_order)",
       )
       .eq("status", "pending_review")
       .order("created_at", { ascending: false }),
@@ -273,6 +274,14 @@ export default async function AdminPage() {
                     {tierFor(l.tier).name.en} plan — <strong>{money(owed)} owed</strong> · look for
                     note <span className="pay-code">{payCode(l.id)}</span>
                   </p>
+                  {l.link_url && (
+                    <p className="msg-body">
+                      Links to:{" "}
+                      <a href={l.link_url} target="_blank" rel="noopener noreferrer">
+                        {l.link_url}
+                      </a>
+                    </p>
+                  )}
                   <p className="msg-contact">
                     Seller: @{seller?.handle} ({seller?.display_name})
                   </p>
@@ -332,11 +341,20 @@ export default async function AdminPage() {
                     </div>
                   )}
                   <p className="msg-body">
-                    {l.category} · ${l.price} · {tierFor(l.tier).name.en} plan{" "}
+                    {l.category}
+                    {!isPromoCategory(l.category) && <> · ${l.price}</>} · {tierFor(l.tier).name.en} plan{" "}
                     {l.payment_status === "paid" && l.tier !== "free" && (
                       <span className="badge badge-live">paid</span>
                     )}
                   </p>
+                  {isPromoCategory(l.category) && l.link_url && (
+                    <p className="msg-body">
+                      Links to:{" "}
+                      <a href={l.link_url} target="_blank" rel="noopener noreferrer">
+                        {l.link_url}
+                      </a>
+                    </p>
+                  )}
                   <p className="msg-contact">
                     Seller: @{seller?.handle} ({seller?.display_name})
                   </p>

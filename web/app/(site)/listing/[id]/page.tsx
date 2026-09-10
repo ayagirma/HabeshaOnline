@@ -2,7 +2,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { SAMPLES } from "@/lib/samples";
-import { catFor, priceLabel, type ListingLike } from "@/lib/listing";
+import { catFor, isPromoCategory, priceLabel, type ListingLike } from "@/lib/listing";
 import { photoUrl } from "@/lib/photo";
 import { LangText } from "./LangText";
 import { InquiryForm } from "./InquiryForm";
@@ -22,6 +22,7 @@ type Row = {
   unit: string;
   place: string;
   tier: string;
+  link_url: string | null;
   created_at: string;
   seller_id: string;
   profiles:
@@ -37,7 +38,7 @@ export default async function ListingPage({ params }: { params: Promise<{ id: st
   const { data: row } = await supabase
     .from("listings")
     .select(
-      "id, status, category, title_en, title_am, desc_en, desc_am, price, unit, place, tier, created_at, seller_id, profiles(handle, display_name, show_contact, contact_method, contact_value), listing_photos(storage_path, sort_order)",
+      "id, status, category, title_en, title_am, desc_en, desc_am, price, unit, place, tier, link_url, created_at, seller_id, profiles(handle, display_name, show_contact, contact_method, contact_value), listing_photos(storage_path, sort_order)",
     )
     .eq("id", id)
     .maybeSingle<Row>();
@@ -59,10 +60,12 @@ export default async function ListingPage({ params }: { params: Promise<{ id: st
         seller: row.profiles?.display_name ?? "",
         createdAt: new Date(row.created_at).getTime(),
         status: row.status,
+        linkUrl: row.link_url,
       }
     : { ...sample!, sample: true, status: "active" };
 
   const seller = row?.profiles ?? null;
+  const isPromo = isPromoCategory(listing.cat);
   const photos = (row?.listing_photos ?? [])
     .slice()
     .sort((a, b) => a.sort_order - b.sort_order)
@@ -87,17 +90,23 @@ export default async function ListingPage({ params }: { params: Promise<{ id: st
               <h1>
                 <LangText en={listing.title.en} am={listing.title.am} />
               </h1>
-              <span className="detail-price">
-                <LangText en={priceLabel(listing, "en")} am={priceLabel(listing, "am")} />
-              </span>
+              {!isPromo && (
+                <span className="detail-price">
+                  <LangText en={priceLabel(listing, "en")} am={priceLabel(listing, "am")} />
+                </span>
+              )}
             </div>
             <div className="detail-meta">
               <span>
                 <LangText en={cat.en} am={cat.am} />
               </span>
               <span className="dot">·</span>
-              <span>📍 {listing.place}</span>
-              <span className="dot">·</span>
+              {!isPromo && (
+                <>
+                  <span>📍 {listing.place}</span>
+                  <span className="dot">·</span>
+                </>
+              )}
               <PostedDate ms={listing.createdAt} />
             </div>
           </div>
@@ -137,14 +146,27 @@ export default async function ListingPage({ params }: { params: Promise<{ id: st
                 ) : null}
               </div>
 
-              {listing.status === "active" ? (
-                <InquiryForm listingId={listing.id} />
-              ) : (
+              {listing.status !== "active" ? (
                 <div className="panel">
                   <p className="note note-warn">
                     This listing isn&rsquo;t active — messages are closed.
                   </p>
                 </div>
+              ) : isPromo ? (
+                listing.linkUrl && (
+                  <div className="panel">
+                    <a
+                      className="btn btn-accent btn-wide btn-lg"
+                      href={listing.linkUrl}
+                      target="_blank"
+                      rel="noopener noreferrer nofollow sponsored"
+                    >
+                      Visit site ↗
+                    </a>
+                  </div>
+                )
+              ) : (
+                <InquiryForm listingId={listing.id} />
               )}
             </>
           )}

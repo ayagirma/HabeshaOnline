@@ -3,7 +3,7 @@
 import { useMemo, useState, useTransition } from "react";
 import Link from "next/link";
 import { useLang } from "@/lib/i18n-context";
-import { CATS, CITIES, TIERS, UNITS, catFor, money, tierFor, type ListingLike } from "@/lib/listing";
+import { CATS, CITIES, TIERS, UNITS, catFor, isPromoCategory, money, tierFor, type ListingLike } from "@/lib/listing";
 import { PAY, payConfigured } from "@/lib/pay";
 import { Card } from "@/app/Card";
 import { createListing } from "./actions";
@@ -28,11 +28,15 @@ export function PostForm({ sellerName }: { sellerName: string }) {
   const [tier, setTier] = useState("free");
   const [agree, setAgree] = useState(false);
   const [photos, setPhotos] = useState<PhotoState>({ paths: [], coverUrl: null, pending: false });
+  const [linkUrl, setLinkUrl] = useState("");
 
+  const isPromo = isPromoCategory(cat);
   const photoMax = tierFor(tier).photos;
   const tooManyPhotos = photos.paths.length > photoMax;
   const chosenTier = tierFor(tier);
-  const tierChoices = PAID_PLANS ? TIERS : TIERS.filter((tr) => tr.usd === 0);
+  const tierChoices = (PAID_PLANS ? TIERS : TIERS.filter((tr) => tr.usd === 0)).filter(
+    (tr) => !isPromo || tr.usd > 0,
+  );
 
   const preview: ListingLike = useMemo(
     () => ({
@@ -41,15 +45,16 @@ export function PostForm({ sellerName }: { sellerName: string }) {
       tier,
       title: { en: title || t("post.titlePh"), am: title || t("post.titlePh") },
       desc: { en: desc, am: desc },
-      price: unit === "quote" ? 0 : Number(price) || 0,
+      price: isPromo || unit === "quote" ? 0 : Number(price) || 0,
       unit,
-      place,
+      place: isPromo ? "" : place,
       seller: sellerName,
       createdAt: now,
       ico: catFor(cat).ico,
       thumb: photos.coverUrl,
+      linkUrl: isPromo ? linkUrl : null,
     }),
-    [cat, tier, title, desc, price, unit, place, sellerName, now, t, photos.coverUrl],
+    [cat, tier, title, desc, price, unit, place, sellerName, now, t, photos.coverUrl, isPromo, linkUrl],
   );
 
   function handleSubmit(formData: FormData) {
@@ -119,7 +124,10 @@ export function PostForm({ sellerName }: { sellerName: string }) {
                   type="button"
                   className="pick"
                   aria-pressed={cat === c.key}
-                  onClick={() => setCat(c.key)}
+                  onClick={() => {
+                    setCat(c.key);
+                    if (isPromoCategory(c.key) && tier === "free") setTier("standard");
+                  }}
                 >
                   {c.ico} {tt(c)}
                 </button>
@@ -165,43 +173,63 @@ export function PostForm({ sellerName }: { sellerName: string }) {
 
         <section className="form-sec">
           <h3>{t("post.sec3")}</h3>
-          <div className="row2">
-            <div className="field">
-              <label htmlFor="price">{t("post.price")}</label>
-              <input
-                id="price"
-                name="price"
-                type="number"
-                min="0"
-                step="1"
-                inputMode="numeric"
-                value={price}
-                onChange={(e) => setPrice(e.target.value)}
-                placeholder={t("post.pricePh")}
-                disabled={unit === "quote"}
-              />
-            </div>
-            <div className="field">
-              <label htmlFor="unit">{t("post.priceUnit")}</label>
-              <select id="unit" name="unit" value={unit} onChange={(e) => setUnit(e.target.value)}>
-                {UNITS.map((u) => (
-                  <option key={u.key} value={u.key}>
-                    {tt(u)}
-                  </option>
-                ))}
-              </select>
-            </div>
-          </div>
-          <div className="field">
-            <label htmlFor="place">{t("post.city")}</label>
-            <select id="place" name="place" value={place} onChange={(e) => setPlace(e.target.value)}>
-              {CITIES.map((c) => (
-                <option key={c} value={c}>
-                  {c}
-                </option>
-              ))}
-            </select>
-          </div>
+          {isPromo ? (
+            <>
+              <p className="hint">{t("post.promoNote")}</p>
+              <div className="field">
+                <label htmlFor="linkUrl">{t("post.linkUrl")}</label>
+                <input
+                  id="linkUrl"
+                  name="linkUrl"
+                  type="url"
+                  required
+                  value={linkUrl}
+                  onChange={(e) => setLinkUrl(e.target.value)}
+                  placeholder={t("post.linkUrlPh")}
+                />
+              </div>
+            </>
+          ) : (
+            <>
+              <div className="row2">
+                <div className="field">
+                  <label htmlFor="price">{t("post.price")}</label>
+                  <input
+                    id="price"
+                    name="price"
+                    type="number"
+                    min="0"
+                    step="0.01"
+                    inputMode="decimal"
+                    value={price}
+                    onChange={(e) => setPrice(e.target.value)}
+                    placeholder={t("post.pricePh")}
+                    disabled={unit === "quote"}
+                  />
+                </div>
+                <div className="field">
+                  <label htmlFor="unit">{t("post.priceUnit")}</label>
+                  <select id="unit" name="unit" value={unit} onChange={(e) => setUnit(e.target.value)}>
+                    {UNITS.map((u) => (
+                      <option key={u.key} value={u.key}>
+                        {tt(u)}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+              <div className="field">
+                <label htmlFor="place">{t("post.city")}</label>
+                <select id="place" name="place" value={place} onChange={(e) => setPlace(e.target.value)}>
+                  {CITIES.map((c) => (
+                    <option key={c} value={c}>
+                      {c}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            </>
+          )}
         </section>
 
         <section className="form-sec">
