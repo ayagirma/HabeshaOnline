@@ -2,6 +2,7 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { photoUrl } from "@/lib/photo";
+import { Logo } from "@/app/Logo";
 import { money, tierFor } from "@/lib/listing";
 import { PAY, payCode } from "@/lib/pay";
 import {
@@ -162,7 +163,7 @@ export default async function AdminPage() {
       <header className="topbar">
         <div className="topbar-in">
           <Link className="brand" href="/">
-            <span className="brand-mark" aria-hidden="true" />
+            <Logo />
             <span className="brand-name">
               Habesha<em>Online</em> · Admin
             </span>

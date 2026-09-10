@@ -5,6 +5,7 @@ import { useMemo, useState } from "react";
 import { useLang } from "@/lib/i18n-context";
 import { CATS, TIERS, catFor, money, priceValue, type ListingLike } from "@/lib/listing";
 import { Card } from "./Card";
+import { Logo } from "./Logo";
 
 /* The Browse screen — ported from src/js/screens/browse.js. Filtering,
    search and sort all happen client-side over the listings the server
@@ -67,7 +68,7 @@ export function HomeClient({
       <header className="topbar">
         <div className="topbar-in">
           <button className="brand" aria-label="HabeshaOnline home">
-            <span className="brand-mark" aria-hidden="true" />
+            <Logo />
             <span className="brand-name">
               Habesha<em>Online</em>
             </span>

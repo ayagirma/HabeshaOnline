@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <clipPath id="seal-clip"><circle cx="50" cy="50" r="46"/></clipPath>
+  <circle cx="50" cy="50" r="46" fill="#1F5B3E"/>
+  <g clip-path="url(#seal-clip)">
+    <rect x="0" y="79" width="100" height="10" fill="#D4901A"/>
+    <rect x="0" y="89" width="100" height="11" fill="#A83418"/>
+  </g>
+  <text x="50" y="61" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-weight="800" font-size="50" fill="#F2EFE6">h</text>
+</svg>

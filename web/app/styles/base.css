@@ -95,13 +95,7 @@ img { display: block; max-width: 100%; }
   display: flex; align-items: center; gap: var(--s3);
   background: none; border: 0; padding: 0; color: inherit;
 }
-.brand-mark {
-  width: 26px; height: 26px; border-radius: 7px; flex: none;
-  background:
-    repeating-linear-gradient(135deg, var(--accent) 0 4px, transparent 4px 8px),
-    repeating-linear-gradient(45deg, var(--berbere) 0 4px, transparent 4px 8px),
-    var(--enset);
-}
+.brand-mark { flex: none; display: block; }
 .brand-name {
   font-family: var(--f-display);
   font-weight: 700; font-size: 19px; letter-spacing: -0.03em;
