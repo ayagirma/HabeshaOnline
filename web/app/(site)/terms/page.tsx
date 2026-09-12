@@ -88,7 +88,7 @@ export default function TermsPage() {
 
         <h3>Contact</h3>
         <p>
-          Questions about these terms: <a href="mailto:hello@habesha-online.com">hello@habesha-online.com</a>.
+          Questions about these terms: <a href="mailto:izendro7@gmail.com">izendro7@gmail.com</a>.
         </p>
       </div>
     </main>
