@@ -1,0 +1,950 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Ethiopia Crisis Watch</title>
+<meta name="description" content="Verified updates, petitions, and fundraisers for communities affected by violence in Ethiopia.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,500;8..60,600;8..60,700&family=Public+Sans:wght@400;500;600;700&family=Noto+Sans+Ethiopic:wght@500&display=swap">
+<style>
+/* Layout: one calm reading column (max 72rem) with a sticky header, a flag-thread
+   rule under it, and a thumb-reach action bar on phones. Serif for headlines
+   (documentary, serious), a civic sans for everything read or operated. */
+:root {
+  --bg:        #F4F5F1;
+  --surface:   #FFFFFF;
+  --sunken:    #EBEDE6;
+  --ink:       #18201A;
+  --ink-2:     #465048;
+  --ink-3:     #69736B;
+  --line:      #D8DCD2;
+  --accent:    #1E6B34;   /* flag green, deepened for text contrast */
+  --accent-hi: #17552A;
+  --on-accent: #FFFFFF;
+  --accent-soft:#E2EEE3;
+  --gold:      #7A5A00;
+  --gold-soft: #FAEFCF;
+  --red:       #9E2A20;
+  --red-soft:  #FBE3E0;
+  --blue:      #2A4F7A;
+  --blue-soft: #E3EBF5;
+  --focus:     #1E6B34;
+  --shadow:    0 1px 2px rgba(24,32,26,.06), 0 4px 16px rgba(24,32,26,.06);
+  --flag-g: #078930; --flag-y: #FCDD09; --flag-r: #DA121A;
+
+  --f-display: "Source Serif 4", Georgia, "Times New Roman", serif;
+  --f-body: "Public Sans", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --f-geez: "Noto Sans Ethiopic", "Nyala", "Abyssinica SIL", sans-serif;
+
+  --r-sm: 6px; --r-md: 10px; --r-lg: 14px;
+  --wrap: 72rem;
+  --gutter: clamp(16px, 4vw, 32px);
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg:#111512; --surface:#191E1A; --sunken:#212722; --ink:#E7EBE5; --ink-2:#B6BFB5; --ink-3:#8D978C;
+    --line:#2E362F; --accent:#63C07C; --accent-hi:#7ED094; --on-accent:#0C1A10; --accent-soft:#1D3124;
+    --gold:#EBC45A; --gold-soft:#352C12; --red:#F2877D; --red-soft:#3A1E1B; --blue:#8DB3E2; --blue-soft:#1A2636;
+    --focus:#7ED094; --shadow: 0 1px 2px rgba(0,0,0,.3), 0 4px 16px rgba(0,0,0,.25);
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg:#111512; --surface:#191E1A; --sunken:#212722; --ink:#E7EBE5; --ink-2:#B6BFB5; --ink-3:#8D978C;
+  --line:#2E362F; --accent:#63C07C; --accent-hi:#7ED094; --on-accent:#0C1A10; --accent-soft:#1D3124;
+  --gold:#EBC45A; --gold-soft:#352C12; --red:#F2877D; --red-soft:#3A1E1B; --blue:#8DB3E2; --blue-soft:#1A2636;
+  --focus:#7ED094; --shadow: 0 1px 2px rgba(0,0,0,.3), 0 4px 16px rgba(0,0,0,.25);
+  color-scheme: dark;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; scroll-padding-top: 5rem; }
+body {
+  margin: 0; background: var(--bg); color: var(--ink);
+  font: 400 1rem/1.6 var(--f-body);
+  -webkit-font-smoothing: antialiased;
+}
+img { max-width: 100%; }
+[hidden] { display: none !important; }
+a { color: var(--accent); text-underline-offset: 3px; }
+a:hover { color: var(--accent-hi); }
+:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; border-radius: 4px; }
+h1, h2, h3 { font-family: var(--f-display); font-weight: 600; line-height: 1.2; text-wrap: balance; margin: 0; letter-spacing: -.01em; }
+h1 { font-size: clamp(1.9rem, 1.3rem + 2.6vw, 3rem); }
+h2 { font-size: clamp(1.35rem, 1.1rem + 1vw, 1.75rem); }
+h3 { font-size: 1.15rem; }
+p { margin: 0; }
+.wrap { max-width: var(--wrap); margin-inline: auto; padding-inline: var(--gutter); }
+.stack { display: flex; flex-direction: column; gap: var(--gap, 1rem); }
+.row { display: flex; flex-wrap: wrap; gap: var(--gap, .75rem); align-items: center; }
+.muted { color: var(--ink-3); }
+.small { font-size: .875rem; }
+.eyebrow { font-size: .78rem; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--ink-3); }
+.geez { font-family: var(--f-geez); }
+.prose { max-width: 65ch; color: var(--ink-2); }
+.prose p + p { margin-top: .9em; }
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+.skip { position: absolute; left: 1rem; top: -4rem; background: var(--accent); color: var(--on-accent); padding: .6rem 1rem; border-radius: var(--r-sm); z-index: 100; }
+.skip:focus { top: 1rem; }
+
+/* ── header ─────────────────────────────────────────── */
+.site-head { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 40; background: color-mix(in srgb, var(--surface) 92%, transparent); backdrop-filter: saturate(1.4) blur(10px); -webkit-backdrop-filter: saturate(1.4) blur(10px); }
+.head-inner { display: flex; align-items: center; gap: 1rem; min-height: 4rem; }
+.brand { display: flex; flex-direction: column; text-decoration: none; color: var(--ink); line-height: 1.15; margin-right: auto; }
+.brand b { font-family: var(--f-display); font-weight: 700; font-size: 1.2rem; letter-spacing: -.01em; }
+.brand b span { color: var(--accent); }
+.brand small { font-family: var(--f-geez); font-size: .72rem; color: var(--ink-3); }
+.nav { display: none; gap: .25rem; }
+.nav a { color: var(--ink-2); text-decoration: none; font-weight: 500; font-size: .95rem; padding: .5rem .7rem; border-radius: var(--r-sm); }
+.nav a:hover { background: var(--sunken); color: var(--ink); }
+.nav a[aria-current="page"] { color: var(--ink); box-shadow: inset 0 -2px 0 var(--accent); border-radius: 0; }
+.menu-btn { display: inline-flex; align-items: center; gap: .4rem; }
+.flag-rule { height: 3px; background: linear-gradient(90deg, var(--flag-g) 0 33.3%, var(--flag-y) 0 66.6%, var(--flag-r) 0); opacity: .9; }
+@media (min-width: 900px) { .nav { display: flex; } .btn.menu-btn { display: none; } }
+
+.drawer { position: fixed; inset: 0; z-index: 60; display: grid; }
+.drawer-scrim { grid-area: 1/1; background: rgba(0,0,0,.4); }
+.drawer-panel { grid-area: 1/1; justify-self: end; width: min(22rem, 88vw); height: 100%; background: var(--surface); padding: calc(1rem + env(safe-area-inset-top, 0px)) 1.25rem 1.5rem; display: flex; flex-direction: column; gap: .25rem; box-shadow: var(--shadow); overflow-y: auto; }
+.drawer-panel a.nav-item { display: flex; justify-content: space-between; align-items: center; padding: .9rem .25rem; border-bottom: 1px solid var(--line); color: var(--ink); text-decoration: none; font-weight: 600; font-size: 1.1rem; }
+.drawer-panel a.nav-item span { font-weight: 400; font-size: .85rem; color: var(--ink-3); }
+.drawer-panel a[aria-current="page"] { color: var(--accent); }
+
+/* ── buttons, chips, tags ──────────────────────────── */
+.btn { --b: var(--line); display: inline-flex; align-items: center; justify-content: center; gap: .5rem; min-height: 2.75rem; padding: .6rem 1.1rem; border-radius: var(--r-md); border: 1px solid var(--b); background: var(--surface); color: var(--ink); font: 600 .95rem/1.2 var(--f-body); text-decoration: none; cursor: pointer; transition: background .15s, border-color .15s, transform .1s; }
+.btn:hover { background: var(--sunken); color: var(--ink); }
+.btn:active { transform: translateY(1px); }
+.btn.primary { background: var(--accent); border-color: var(--accent); color: var(--on-accent); }
+.btn.primary:hover { background: var(--accent-hi); border-color: var(--accent-hi); color: var(--on-accent); }
+.btn.ghost { background: transparent; border-color: transparent; }
+.btn.ghost:hover { background: var(--sunken); }
+.btn.lg { min-height: 3.25rem; padding-inline: 1.4rem; font-size: 1.02rem; }
+.btn.block { width: 100%; }
+.btn.sm { min-height: 2.25rem; padding: .35rem .8rem; font-size: .875rem; }
+.btn svg { width: 1.1em; height: 1.1em; flex: none; }
+
+.tag { display: inline-flex; align-items: center; gap: .3rem; font-size: .75rem; font-weight: 600; padding: .15rem .55rem; border-radius: 999px; background: var(--sunken); color: var(--ink-2); white-space: nowrap; }
+.tag.breaking { background: var(--red-soft); color: var(--red); }
+.tag.update { background: var(--gold-soft); color: var(--gold); }
+.tag.action { background: var(--accent-soft); color: var(--accent); }
+.tag.account { background: var(--blue-soft); color: var(--blue); }
+.tag.sample { background: transparent; border: 1px dashed var(--ink-3); color: var(--ink-3); font-weight: 500; }
+.tag.breaking::before { content: ""; width: .45rem; height: .45rem; border-radius: 50%; background: currentColor; animation: pulse 1.6s infinite; }
+@keyframes pulse { 50% { opacity: .3; } }
+
+.chips { display: flex; gap: .5rem; overflow-x: auto; padding-bottom: .25rem; scrollbar-width: none; }
+.chips::-webkit-scrollbar { display: none; }
+.chip { flex: none; min-height: 2.5rem; padding: .4rem 1rem; border-radius: 999px; border: 1px solid var(--line); background: var(--surface); color: var(--ink-2); font: 500 .9rem var(--f-body); cursor: pointer; }
+.chip[aria-pressed="true"] { background: var(--ink); border-color: var(--ink); color: var(--bg); }
+.chip .n { opacity: .6; margin-left: .25rem; font-variant-numeric: tabular-nums; }
+
+/* ── surfaces ───────────────────────────────────────── */
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r-lg); padding: 1.25rem; min-width: 0; }
+.panel { background: var(--sunken); border-radius: var(--r-lg); padding: 1.25rem; min-width: 0; }
+.grid { display: grid; gap: 1rem; grid-template-columns: repeat(auto-fit, minmax(min(100%, 17rem), 1fr)); }
+.grid-2 { display: grid; gap: 1rem; grid-template-columns: repeat(auto-fill, minmax(min(100%, 22rem), 1fr)); }
+.section { padding-block: clamp(2rem, 5vw, 3.5rem); }
+.section + .section { border-top: 1px solid var(--line); }
+.section-head { display: flex; justify-content: space-between; align-items: baseline; gap: 1rem; flex-wrap: wrap; margin-bottom: 1.25rem; }
+.section-head a { font-weight: 600; text-decoration: none; white-space: nowrap; }
+.page-head { padding-block: clamp(1.75rem, 5vw, 3rem) 1.25rem; }
+.page-head .prose { margin-top: .6rem; font-size: 1.05rem; }
+
+/* ── hero ───────────────────────────────────────────── */
+.hero { background: var(--surface); border-bottom: 1px solid var(--line); }
+.hero-inner { display: grid; gap: 2rem; padding-block: clamp(2rem, 6vw, 4rem); align-items: center; }
+@media (min-width: 900px) { .hero-inner { grid-template-columns: 1.35fr 1fr; } }
+.hero h1 { max-width: 18ch; }
+.hero .lede { margin-top: 1rem; font-size: clamp(1.02rem, .95rem + .35vw, 1.2rem); color: var(--ink-2); max-width: 46ch; }
+.hero .ctas { margin-top: 1.75rem; }
+.hero-meta { margin-top: 1.5rem; display: flex; gap: .5rem 1.25rem; flex-wrap: wrap; font-size: .85rem; color: var(--ink-3); }
+.hero-meta b { color: var(--ink); font-variant-numeric: tabular-nums; }
+
+/* ── update cards ───────────────────────────────────── */
+.post-card { display: flex; flex-direction: column; gap: .55rem; text-decoration: none; color: inherit; transition: border-color .15s, box-shadow .15s, transform .15s; }
+.post-card:hover { border-color: color-mix(in srgb, var(--accent) 45%, var(--line)); box-shadow: var(--shadow); color: inherit; }
+.post-card h3 { font-size: 1.1rem; }
+.post-card .sum { color: var(--ink-2); font-size: .93rem; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+.meta { display: flex; flex-wrap: wrap; gap: .25rem .5rem; font-size: .8rem; color: var(--ink-3); align-items: center; }
+.meta .dot::before { content: "·"; margin-right: .5rem; }
+.verified { display: inline-flex; align-items: center; gap: .25rem; color: var(--accent); font-weight: 600; }
+.verified svg { width: .95rem; height: .95rem; }
+.developing { color: var(--gold); font-weight: 600; }
+
+.post-list { display: flex; flex-direction: column; gap: .75rem; }
+.post-row { display: grid; gap: .5rem; grid-template-columns: 1fr; }
+@media (min-width: 720px) { .post-row { grid-template-columns: 9rem 1fr; gap: 1.25rem; } }
+.post-row .when { font-size: .82rem; color: var(--ink-3); font-variant-numeric: tabular-nums; }
+.post-row .when b { display: block; color: var(--ink); font-size: .95rem; }
+
+/* ── progress ───────────────────────────────────────── */
+.progress { height: .6rem; border-radius: 999px; background: var(--sunken); overflow: hidden; }
+.card .progress, .panel .progress { background: color-mix(in srgb, var(--ink) 10%, transparent); }
+.progress > i { display: block; height: 100%; width: var(--p, 0%); background: var(--accent); border-radius: inherit; transition: width .8s cubic-bezier(.2,.8,.2,1); }
+.money { display: flex; align-items: baseline; gap: .4rem; flex-wrap: wrap; font-variant-numeric: tabular-nums; }
+.money b { font-family: var(--f-display); font-size: 1.6rem; font-weight: 700; }
+.stats3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: .5rem; text-align: left; font-variant-numeric: tabular-nums; }
+.stats3 b { display: block; font-size: 1.05rem; }
+.stats3 span { font-size: .78rem; color: var(--ink-3); }
+
+.fund-hero { display: grid; gap: 1.5rem; }
+@media (min-width: 900px) { .fund-hero { grid-template-columns: 1.3fr 1fr; align-items: start; } .fund-hero .donate-box { position: sticky; top: 5.5rem; } }
+.donate-box { box-shadow: var(--shadow); }
+.gfm-note { display: flex; gap: .5rem; align-items: flex-start; font-size: .82rem; color: var(--ink-3); }
+.gfm-note svg { flex: none; width: 1rem; height: 1rem; margin-top: .15rem; }
+.alloc { display: flex; flex-direction: column; gap: .75rem; }
+.alloc-row { display: grid; grid-template-columns: 1fr auto; gap: .3rem .75rem; font-size: .93rem; }
+.alloc-row .progress { grid-column: 1 / -1; height: .4rem; }
+.alloc-row b { font-variant-numeric: tabular-nums; }
+
+/* ── action steps + letter ──────────────────────────── */
+.steps { counter-reset: step; display: grid; gap: 1rem; grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr)); }
+.step { counter-increment: step; display: flex; gap: .85rem; align-items: flex-start; }
+.step::before { content: counter(step); flex: none; display: grid; place-items: center; width: 2rem; height: 2rem; border-radius: 50%; background: var(--accent); color: var(--on-accent); font-weight: 700; font-size: .9rem; }
+.letter-grid { display: grid; gap: 1.25rem; }
+@media (min-width: 900px) { .letter-grid { grid-template-columns: 1fr 1.15fr; align-items: start; } .letter-grid .letter-out { position: sticky; top: 5.5rem; } }
+.field { display: flex; flex-direction: column; gap: .35rem; min-width: 0; }
+.field label { font-weight: 600; font-size: .88rem; }
+.field .hint { font-size: .8rem; color: var(--ink-3); }
+input, select, textarea { font: inherit; color: var(--ink); background: var(--surface); border: 1px solid var(--line); border-radius: var(--r-md); padding: .65rem .8rem; min-height: 2.75rem; width: 100%; }
+textarea { min-height: 6rem; resize: vertical; }
+input:focus, select:focus, textarea:focus { outline: 2px solid var(--focus); outline-offset: 0; border-color: transparent; }
+.two { display: grid; gap: .75rem; grid-template-columns: repeat(auto-fit, minmax(min(100%, 10rem), 1fr)); }
+.letter-paper { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r-md); padding: 1.25rem; font: 400 .95rem/1.7 var(--f-display); white-space: pre-wrap; color: var(--ink); max-height: 30rem; overflow-y: auto; }
+
+/* ── learn ──────────────────────────────────────────── */
+.timeline { list-style: none; margin: 0; padding: 0; position: relative; }
+.timeline::before { content: ""; position: absolute; left: .45rem; top: .5rem; bottom: .5rem; width: 2px; background: var(--line); }
+.timeline li { position: relative; padding: 0 0 1.5rem 2rem; }
+.timeline li::before { content: ""; position: absolute; left: 0; top: .35rem; width: 1rem; height: 1rem; border-radius: 50%; background: var(--surface); border: 3px solid var(--accent); }
+.timeline .date { font-weight: 700; font-variant-numeric: tabular-nums; font-size: .9rem; }
+.timeline h3 { margin-top: .15rem; font-size: 1.05rem; }
+.timeline p { color: var(--ink-2); font-size: .93rem; margin-top: .25rem; max-width: 60ch; }
+details.acc { border: 1px solid var(--line); border-radius: var(--r-lg); background: var(--surface); }
+details.acc + details.acc { margin-top: .75rem; }
+details.acc summary { list-style: none; cursor: pointer; padding: 1rem 1.25rem; display: flex; justify-content: space-between; align-items: center; gap: 1rem; font-weight: 600; }
+details.acc summary::-webkit-details-marker { display: none; }
+details.acc summary::after { content: "+"; font-size: 1.4rem; font-weight: 400; color: var(--ink-3); line-height: 1; }
+details.acc[open] summary::after { content: "–"; }
+details.acc .acc-body { padding: 0 1.25rem 1.25rem; }
+.draft-note { display: flex; gap: .6rem; align-items: flex-start; background: var(--gold-soft); color: var(--gold); border-radius: var(--r-md); padding: .75rem 1rem; font-size: .88rem; }
+.draft-note svg { flex: none; width: 1.1rem; height: 1.1rem; margin-top: .1rem; }
+
+/* ── article ────────────────────────────────────────── */
+.article { max-width: 44rem; }
+.article h1 { font-size: clamp(1.7rem, 1.3rem + 2vw, 2.5rem); margin-top: .75rem; }
+.article .body { margin-top: 1.5rem; font-size: 1.07rem; line-height: 1.75; color: var(--ink); }
+.article .body p + p { margin-top: 1em; }
+.source-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: .5rem; }
+.source-list a { display: flex; justify-content: space-between; gap: 1rem; align-items: center; padding: .75rem 1rem; border: 1px solid var(--line); border-radius: var(--r-md); text-decoration: none; background: var(--surface); color: var(--ink); overflow-wrap: anywhere; }
+.source-list a:hover { border-color: var(--accent); }
+.source-list small { color: var(--ink-3); }
+.share { display: flex; flex-wrap: wrap; gap: .5rem; }
+.back { display: inline-flex; gap: .35rem; align-items: center; text-decoration: none; font-weight: 600; font-size: .92rem; }
+.safety { display: flex; gap: .6rem; align-items: flex-start; background: var(--blue-soft); color: var(--blue); padding: .8rem 1rem; border-radius: var(--r-md); font-size: .9rem; }
+.safety svg { flex: none; width: 1.1rem; height: 1.1rem; margin-top: .15rem; }
+
+.trust { display: grid; gap: 1.25rem; grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr)); }
+.trust > div { display: flex; gap: .75rem; }
+.trust svg { flex: none; width: 1.5rem; height: 1.5rem; color: var(--accent); }
+.trust h3 { font-family: var(--f-body); font-size: 1rem; font-weight: 700; }
+.trust p { font-size: .9rem; color: var(--ink-2); margin-top: .2rem; }
+
+.empty { text-align: center; padding: 2.5rem 1rem; color: var(--ink-3); }
+
+/* ── footer, newsletter ─────────────────────────────── */
+.newsletter { background: var(--ink); color: var(--bg); }
+.newsletter .wrap { display: grid; gap: 1.25rem; padding-block: 2.25rem; align-items: center; }
+@media (min-width: 800px) { .newsletter .wrap { grid-template-columns: 1fr 1.1fr; } }
+.newsletter h2 { color: var(--bg); }
+.newsletter p { color: color-mix(in srgb, var(--bg) 75%, var(--ink)); margin-top: .35rem; font-size: .95rem; }
+.nl-form { display: flex; gap: .5rem; flex-wrap: wrap; }
+.nl-form input { flex: 1 1 14rem; background: color-mix(in srgb, var(--bg) 8%, var(--ink)); border-color: color-mix(in srgb, var(--bg) 25%, var(--ink)); color: var(--bg); }
+.nl-form input::placeholder { color: color-mix(in srgb, var(--bg) 55%, var(--ink)); }
+.nl-form .btn { flex: 0 0 auto; }
+.nl-msg { grid-column: 1 / -1; font-size: .88rem; }
+.site-foot { padding-block: 2rem 2.5rem; font-size: .88rem; color: var(--ink-3); }
+.foot-grid { display: grid; gap: 1.5rem; grid-template-columns: repeat(auto-fit, minmax(min(100%, 12rem), 1fr)); }
+.foot-grid h3 { font-family: var(--f-body); font-size: .8rem; text-transform: uppercase; letter-spacing: .08em; color: var(--ink-2); margin-bottom: .5rem; }
+.foot-grid ul { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: .35rem; }
+.foot-grid a { color: var(--ink-2); text-decoration: none; }
+.foot-grid a:hover { color: var(--accent); text-decoration: underline; }
+.foot-base { margin-top: 2rem; padding-top: 1.25rem; border-top: 1px solid var(--line); display: flex; flex-wrap: wrap; gap: .5rem 1.5rem; justify-content: space-between; }
+
+/* ── mobile action bar ──────────────────────────────── */
+.action-bar { position: fixed; left: 0; right: 0; bottom: 0; z-index: 45; display: grid; grid-template-columns: 1fr 1fr; gap: .5rem; padding: .6rem var(--gutter) calc(.6rem + env(safe-area-inset-bottom, 0px)); background: color-mix(in srgb, var(--surface) 94%, transparent); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border-top: 1px solid var(--line); }
+body { padding-bottom: 4.5rem; }
+@media (min-width: 900px) { .action-bar { display: none; } body { padding-bottom: 0; } }
+
+.toast { position: fixed; left: 50%; bottom: calc(5.5rem + env(safe-area-inset-bottom, 0px)); transform: translate(-50%, 1rem); background: var(--ink); color: var(--bg); padding: .7rem 1.1rem; border-radius: var(--r-md); font-size: .92rem; opacity: 0; pointer-events: none; transition: opacity .2s, transform .2s; z-index: 80; max-width: calc(100vw - 2rem); }
+.toast.show { opacity: 1; transform: translate(-50%, 0); }
+@media (min-width: 900px) { .toast { bottom: 2rem; } }
+
+main:focus { outline: none; }
+.view { animation: rise .35s ease-out both; }
+@keyframes rise { from { opacity: .4; transform: translateY(6px); } }
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important; } }
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="site-head">
+  <div class="wrap head-inner">
+    <a class="brand" href="#home" aria-label="Ethiopia Crisis Watch, home">
+      <b><span>Ethiopia</span> Crisis Watch</b>
+      <small lang="am">የኢትዮጵያ ቀውስ ክትትል</small>
+    </a>
+    <nav class="nav" aria-label="Main">
+      <a href="#news">News</a>
+      <a href="#action">Take Action</a>
+      <a href="#donate">Donate</a>
+      <a href="#learn">Learn</a>
+      <a href="#about">About</a>
+    </nav>
+    <a class="btn primary sm" href="#donate" id="head-donate">Donate</a>
+    <button class="btn ghost sm menu-btn" id="menu-open" aria-expanded="false" aria-controls="drawer">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+      Menu
+    </button>
+  </div>
+  <div class="flag-rule" aria-hidden="true"></div>
+</header>
+
+<div class="drawer" id="drawer" hidden>
+  <div class="drawer-scrim" data-close></div>
+  <nav class="drawer-panel" aria-label="Menu">
+    <div class="row" style="justify-content:space-between;margin-bottom:.5rem">
+      <span class="eyebrow">Menu</span>
+      <button class="btn ghost sm" data-close>Close</button>
+    </div>
+    <a class="nav-item" href="#home">Home <span>Start here</span></a>
+    <a class="nav-item" href="#news">News &amp; Updates <span>Verified reports</span></a>
+    <a class="nav-item" href="#action">Take Action <span>Petitions, letters</span></a>
+    <a class="nav-item" href="#donate">Donate <span>GoFundMe</span></a>
+    <a class="nav-item" href="#learn">Learn <span>History, regions</span></a>
+    <a class="nav-item" href="#about">About &amp; Contact <span>Who we are</span></a>
+  </nav>
+</div>
+
+<main id="main" tabindex="-1"></main>
+
+<section class="newsletter" aria-labelledby="nl-title">
+  <div class="wrap">
+    <div>
+      <h2 id="nl-title">Get verified updates in your inbox</h2>
+      <p>One email a week, plus urgent alerts when action is needed. No spam, unsubscribe anytime.</p>
+    </div>
+    <form class="nl-form" id="nl-form" novalidate>
+      <label class="sr-only" for="nl-email">Email address</label>
+      <input id="nl-email" type="email" name="email" placeholder="name@email.com" autocomplete="email" required>
+      <button class="btn primary" type="submit">Subscribe</button>
+      <p class="nl-msg" id="nl-msg" role="status"></p>
+    </form>
+  </div>
+</section>
+
+<footer class="site-foot">
+  <div class="wrap">
+    <div class="foot-grid">
+      <div>
+        <p style="font-family:var(--f-display);font-weight:700;color:var(--ink);font-size:1.1rem"><span style="color:var(--accent)">Ethiopia</span> Crisis Watch</p>
+        <p style="margin-top:.4rem">Documenting the crisis. Amplifying the call to act.</p>
+      </div>
+      <div>
+        <h3>Site</h3>
+        <ul><li><a href="#news">News &amp; Updates</a></li><li><a href="#action">Take Action</a></li><li><a href="#donate">Donate</a></li><li><a href="#learn">Learn</a></li><li><a href="#about">About &amp; Contact</a></li></ul>
+      </div>
+      <div>
+        <h3>Follow</h3>
+        <ul id="foot-social"></ul>
+      </div>
+      <div>
+        <h3>Your safety</h3>
+        <p>We remove names, faces, and locations from firsthand accounts before publishing. <a href="#about">How to share safely</a>.</p>
+      </div>
+    </div>
+    <div class="foot-base">
+      <span>Donations are processed by GoFundMe. We never see your card details.</span>
+      <span id="foot-updated"></span>
+    </div>
+  </div>
+</footer>
+
+<div class="action-bar" id="action-bar">
+  <a class="btn" href="#action">Take action</a>
+  <a class="btn primary" href="#donate">Donate</a>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+/* ════════════════════════════════════════════════════════════════════
+   EDIT HERE. Everything the site shows lives in CONFIG and CONTENT.
+   Items marked sample:true show a "Sample" label until you replace them.
+   ════════════════════════════════════════════════════════════════════ */
+var CONFIG = {
+  siteName: "Ethiopia Crisis Watch",
+  siteUrl: "",                 // e.g. "https://ethiopiacrisiswatch.org" (used in share links; blank = current page)
+  contactEmail: "hello@yourdomain.org",
+  // Where the newsletter and contact forms POST (Formspree, Buttondown, Mailchimp, Netlify Forms…).
+  // Leave blank and the forms say plainly that nothing was sent.
+  newsletterEndpoint: "",
+  contactEndpoint: "",
+  // true = also load GoFundMe's official embed widget on the Donate page (works on your own domain).
+  gofundmeWidget: false,
+  social: [
+    { name: "Instagram", url: "https://www.instagram.com/" },
+    { name: "TikTok",    url: "https://www.tiktok.com/" },
+    { name: "X",         url: "https://x.com/" },
+    { name: "Facebook",  url: "https://www.facebook.com/" }
+  ]
+};
+
+var CONTENT = {
+  regions: ["Amhara", "Oromia", "Tigray", "Arsi"],
+
+  /* GoFundMe campaigns. Paste each campaign's link as gofundmeUrl
+     (https://www.gofundme.com/f/<your-campaign>). raised / donors are copied
+     from the campaign page when you post an update; the Donate button always
+     sends people to GoFundMe's own secure checkout. */
+  campaigns: [
+    {
+      id: "arsi-churches", sample: true, featured: true,
+      title: "Rebuild churches in Arsi",
+      region: "Arsi",
+      organizer: "Soleyana, on behalf of local parish committees",
+      gofundmeUrl: "https://www.gofundme.com/f/replace-with-your-campaign",
+      goal: 50000, raised: 21400, donors: 312, asOf: "2026-09-28",
+      summary: "Churches in Arsi were damaged or destroyed during recent violence. This fundraiser pays for materials and local labor to rebuild them, starting with the buildings congregations still gather in.",
+      uses: [
+        { label: "Building materials", pct: 65 },
+        { label: "Local labor and craftsmen", pct: 25 },
+        { label: "Transport of materials", pct: 7 },
+        { label: "Card processing (GoFundMe takes no platform fee)", pct: 3 }
+      ],
+      updates: [
+        { date: "2026-09-28", text: "Sample update: first shipment of materials purchased. Receipts are posted on the GoFundMe page." },
+        { date: "2026-09-12", text: "Sample update: campaign launched with the parish committees' list of priority repairs." }
+      ]
+    },
+    {
+      id: "displaced-families", sample: true,
+      title: "Food and shelter for displaced families",
+      region: "Amhara",
+      organizer: "Community volunteers",
+      gofundmeUrl: "https://www.gofundme.com/f/replace-with-your-campaign",
+      goal: 30000, raised: 8900, donors: 141, asOf: "2026-09-25",
+      summary: "Emergency food, blankets, and temporary shelter for families who have had to leave their homes.",
+      uses: [], updates: []
+    }
+  ],
+
+  petitions: [
+    { id: "access", sample: true, title: "Ask Congress to press for full humanitarian access",
+      text: "Aid groups need safe, unrestricted access to reach civilians. This petition asks members of Congress to make access a condition of U.S. engagement.",
+      host: "Change.org", url: "https://www.change.org/" },
+    { id: "investigate", sample: true, title: "Call for an independent investigation of attacks on civilians",
+      text: "Asks the State Department to support an independent, international investigation and to publish its findings.",
+      host: "Change.org", url: "https://www.change.org/" }
+  ],
+
+  /* News posts, newest first. type: breaking | update | action | account.
+     status: "verified" (sources checked) or "developing". */
+  posts: [
+    { id: "alert-template", sample: true, type: "breaking", status: "developing", region: "Amhara", date: "2026-09-30",
+      title: "Headline for urgent news goes here",
+      summary: "Urgent posts sit at the top with a red Breaking label. Keep the summary to two sentences: what happened, and what readers can do right now.",
+      body: ["This is a sample urgent post. When something is still being confirmed, it is marked Developing until at least two independent sources agree.",
+             "End every urgent post with one clear action: sign a petition, contact a representative, or share the post."],
+      sources: [{ label: "ReliefWeb: Ethiopia", url: "https://reliefweb.int/country/eth" }] },
+    { id: "oromia-sitrep", sample: true, type: "update", status: "verified", region: "Oromia", date: "2026-09-29",
+      title: "Weekly situation report: Oromia",
+      summary: "A roundup of verified reports from the past seven days, with a link to each source.",
+      body: ["Sample situation report. Each weekly report lists what was reported, who reported it, and what is still unconfirmed.",
+             "Figures come only from named sources such as UN agencies, the Ethiopian Human Rights Commission, or established news outlets."],
+      sources: [{ label: "UN OCHA: Ethiopia", url: "https://www.unocha.org/ethiopia" }, { label: "ReliefWeb: Ethiopia", url: "https://reliefweb.int/country/eth" }] },
+    { id: "petition-congress", sample: true, type: "action", status: "verified", region: "Advocacy", date: "2026-09-26",
+      title: "New petition to Congress on humanitarian access",
+      summary: "Sign in under a minute, then send the prefilled letter to your representative.",
+      body: ["Sample action post. Action posts link straight to the petition and to the letter tool so readers can act in as few taps as possible."],
+      sources: [], cta: "action" },
+    { id: "arsi-account", sample: true, type: "account", status: "verified", region: "Arsi", date: "2026-09-22",
+      title: "Firsthand account from Arsi, identifying details removed",
+      summary: "A resident describes the week their village was attacked. Names, faces, and exact locations have been removed for their safety.",
+      body: ["Sample firsthand account. Before publishing, remove names, faces, village names, and any detail that could identify the speaker or their family.",
+             "Say what was changed at the end of the post, so readers know the account was edited for safety and not for content."],
+      sources: [], anonymized: true },
+    { id: "tigray-access", sample: true, type: "update", status: "verified", region: "Tigray", date: "2026-09-18",
+      title: "Humanitarian access update: Tigray",
+      summary: "What aid agencies are reporting about access to food, medicine, and fuel.",
+      body: ["Sample update post."],
+      sources: [{ label: "UN OCHA: Ethiopia", url: "https://www.unocha.org/ethiopia" }] },
+    { id: "amhara-sitrep", sample: true, type: "update", status: "verified", region: "Amhara", date: "2026-09-15",
+      title: "Weekly situation report: Amhara",
+      summary: "Verified reports from the past seven days, with sources.",
+      body: ["Sample situation report."],
+      sources: [{ label: "ReliefWeb: Ethiopia", url: "https://reliefweb.int/country/eth" }] }
+  ],
+
+  /* Learn page. Every timeline entry needs a source before it goes live. */
+  timeline: [
+    { date: "Nov 2020", title: "War begins in Tigray", text: "Fighting breaks out between federal forces and the Tigray People's Liberation Front." },
+    { date: "Nov 2022", title: "Pretoria agreement", text: "The federal government and the TPLF sign a cessation of hostilities agreement in Pretoria, South Africa." },
+    { date: "2023", title: "Oromia peace talks", text: "Talks between the government and the Oromo Liberation Army in Tanzania end without a deal." },
+    { date: "Aug 2023", title: "State of emergency in Amhara", text: "A state of emergency is declared as fighting spreads between federal forces and Fano militias." }
+  ],
+  regionsInfo: [
+    { name: "Amhara", text: "Northern and northwestern Ethiopia. Write a short, sourced explainer: who lives here, what the conflict is about, and what civilians are facing now." },
+    { name: "Oromia", text: "Ethiopia's largest region by population and area. Explain the long-running conflict and its effect on civilians, with sources." },
+    { name: "Tigray", text: "Northernmost region, bordering Eritrea. Cover the 2020–2022 war, the Pretoria agreement, and the humanitarian situation since." },
+    { name: "Arsi", text: "A zone in Oromia region. Explain the attacks on communities and churches here, and why this fundraiser focuses on Arsi." }
+  ],
+  articles: [
+    { title: "A short history of the conflicts", note: "From the slide series, part 1", ready: false },
+    { title: "Who is affected, region by region", note: "From the slide series, part 2", ready: false },
+    { title: "How to read a situation report", note: "From the slide series, part 3", ready: false }
+  ],
+  sources: [
+    { label: "ReliefWeb: Ethiopia", url: "https://reliefweb.int/country/eth" },
+    { label: "UN OCHA: Ethiopia", url: "https://www.unocha.org/ethiopia" },
+    { label: "Ethiopian Human Rights Commission", url: "https://ehrc.org/" },
+    { label: "Human Rights Watch: Ethiopia", url: "https://www.hrw.org/africa/ethiopia" }
+  ]
+};
+
+/* ════════════════════════════════════════════════════════════════════
+   App code below. No edits needed for content changes.
+   ════════════════════════════════════════════════════════════════════ */
+(function () {
+  var $ = function (s, r) { return (r || document).querySelector(s); };
+  var main = $("#main");
+
+  function esc(s) { return String(s == null ? "" : s).replace(/[&<>"']/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]; }); }
+  function store(k, v) { try { if (v === undefined) return JSON.parse(localStorage.getItem("ecw:" + k)); localStorage.setItem("ecw:" + k, JSON.stringify(v)); } catch (e) { return null; } }
+
+  /* Dates in both calendars, the way the diaspora reads them. */
+  var ET_MONTHS = ["Meskerem","Tikimt","Hidar","Tahsas","Tir","Yekatit","Megabit","Miazia","Ginbot","Sene","Hamle","Nehase","Pagume"];
+  function parseDay(s) { var p = s.split("-"); return new Date(+p[0], +p[1] - 1, +p[2]); }
+  function toEthiopic(d) {
+    var y = d.getFullYear(), m = d.getMonth() + 1, day = d.getDate();
+    var a = Math.floor((14 - m) / 12), yy = y + 4800 - a, mm = m + 12 * a - 3;
+    var jdn = day + Math.floor((153 * mm + 2) / 5) + 365 * yy + Math.floor(yy / 4) - Math.floor(yy / 100) + Math.floor(yy / 400) - 32045;
+    var mod = function (x, n) { return ((x % n) + n) % n; };
+    var r = mod(jdn - 1723856, 1461), n = mod(r, 365) + 365 * Math.floor(r / 1460);
+    return { y: 4 * Math.floor((jdn - 1723856) / 1461) + Math.floor(r / 365) - Math.floor(r / 1460), m: Math.floor(n / 30) + 1, d: mod(n, 30) + 1 };
+  }
+  function gDate(s) { return parseDay(s).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }); }
+  function eDate(s) { var e = toEthiopic(parseDay(s)); return ET_MONTHS[e.m - 1] + " " + e.d + ", " + e.y + " E.C."; }
+  function relDay(s) {
+    var d = Math.round((new Date().setHours(0,0,0,0) - parseDay(s)) / 864e5);
+    if (d <= 0) return "Today"; if (d === 1) return "Yesterday"; if (d < 7) return d + " days ago";
+    return gDate(s);
+  }
+  function usd(n) { return "$" + Math.round(n).toLocaleString("en-US"); }
+  function pct(c) { return Math.min(100, Math.round(c.raised / c.goal * 100)); }
+  function donateUrl(c) { return c.gofundmeUrl.replace(/\/+$/, "") + "/donate"; }
+  function pageUrl(hash) { var base = CONFIG.siteUrl || (location.href.split("#")[0]); return base + (hash ? "#" + hash : ""); }
+
+  var ICON = {
+    check: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>',
+    lock: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>',
+    ext: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/></svg>',
+    shield: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3 4 6v6c0 5 3.5 8 8 9 4.5-1 8-4 8-9V6z"/></svg>',
+    link: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"/></svg>',
+    info: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 8h.01M11 12h1v5h1"/></svg>',
+    doc: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3H6a1 1 0 0 0-1 1v16a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V8z"/><path d="M14 3v5h5M9 13h6M9 17h6"/></svg>',
+    arrowL: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg>'
+  };
+
+  var TYPE_LABEL = { breaking: "Breaking", update: "Update", action: "Action", account: "Firsthand account" };
+  function sampleTag(x) { return x.sample ? ' <span class="tag sample" title="Placeholder content. Replace before launch.">Sample</span>' : ""; }
+  function statusBadge(p) {
+    if (p.status === "developing") return '<span class="developing">Developing</span>';
+    var n = (p.sources || []).length;
+    return '<span class="verified">' + ICON.check + (n ? "Verified · " + n + " source" + (n > 1 ? "s" : "") : "Verified") + "</span>";
+  }
+
+  /* ── components ─────────────────────────────────── */
+  function postCard(p) {
+    return '<a class="card post-card" href="#post-' + esc(p.id) + '">' +
+      '<div class="row" style="--gap:.4rem"><span class="tag ' + p.type + '">' + TYPE_LABEL[p.type] + "</span>" + sampleTag(p) + "</div>" +
+      "<h3>" + esc(p.title) + "</h3>" +
+      '<p class="sum">' + esc(p.summary) + "</p>" +
+      '<div class="meta" style="margin-top:auto"><span>' + esc(p.region) + '</span><span class="dot">' + relDay(p.date) + '</span><span class="dot">' + statusBadge(p) + "</span></div></a>";
+  }
+
+  function progressBlock(c, big) {
+    var p = pct(c);
+    return '<div class="stack" style="--gap:.6rem">' +
+      '<div class="money"><b' + (big ? "" : ' style="font-size:1.3rem"') + ">" + usd(c.raised) + '</b><span class="muted">raised of ' + usd(c.goal) + " goal</span></div>" +
+      '<div class="progress" role="progressbar" aria-label="Amount raised" aria-valuemin="0" aria-valuemax="100" aria-valuenow="' + p + '"><i style="--p:' + p + '%"></i></div>' +
+      '<div class="meta"><span><b style="color:var(--ink)">' + p + "%</b> funded</span><span class=\"dot\">" + c.donors.toLocaleString("en-US") + ' donors</span><span class="dot">as of ' + gDate(c.asOf) + "</span></div></div>";
+  }
+
+  function gfmButton(c, cls) {
+    return '<a class="btn primary ' + (cls || "") + '" href="' + esc(donateUrl(c)) + '" target="_blank" rel="noopener" data-donate="' + esc(c.id) + '">Donate on GoFundMe ' + ICON.ext + "</a>";
+  }
+
+  function shareBar(hash, text) {
+    var url = pageUrl(hash), u = encodeURIComponent(url), t = encodeURIComponent(text);
+    return '<div class="share" aria-label="Share">' +
+      '<button class="btn sm" data-copy="' + esc(url) + '">' + ICON.link + "Copy link</button>" +
+      '<a class="btn sm" target="_blank" rel="noopener" href="https://wa.me/?text=' + t + "%20" + u + '">WhatsApp</a>' +
+      '<a class="btn sm" target="_blank" rel="noopener" href="https://t.me/share/url?url=' + u + "&text=" + t + '">Telegram</a>' +
+      '<a class="btn sm" target="_blank" rel="noopener" href="https://x.com/intent/post?text=' + t + "&url=" + u + '">X</a>' +
+      '<a class="btn sm" target="_blank" rel="noopener" href="https://www.facebook.com/sharer/sharer.php?u=' + u + '">Facebook</a>' +
+      "</div>";
+  }
+
+  function draftNote(text) { return '<div class="draft-note">' + ICON.info + "<span>" + text + "</span></div>"; }
+
+  function featured() { return CONTENT.campaigns.filter(function (c) { return c.featured; })[0] || CONTENT.campaigns[0]; }
+
+  /* ── views ──────────────────────────────────────── */
+  var VIEWS = {};
+
+  VIEWS.home = function () {
+    var c = featured(), latest = CONTENT.posts.slice(0, 3), last = CONTENT.posts[0];
+    return '<section class="hero"><div class="wrap hero-inner">' +
+      "<div>" +
+        '<p class="eyebrow">Updated ' + gDate(last.date) + ' · <span>' + eDate(last.date) + "</span></p>" +
+        '<h1 style="margin-top:.75rem">Documenting the crisis. Amplifying the call to act.</h1>' +
+        '<p class="lede">Verified updates, petitions, and fundraisers for communities affected by violence in Ethiopia.</p>' +
+        '<div class="row ctas"><a class="btn primary lg" href="#action">Sign a petition</a><a class="btn lg" href="#donate">Donate</a><a class="btn ghost lg" href="#learn">Learn the history</a></div>' +
+        '<div class="hero-meta"><span><b>' + CONTENT.posts.length + "</b> updates this month</span><span><b>" + CONTENT.petitions.length + "</b> open petitions</span><span><b>" + CONTENT.campaigns.length + "</b> active fundraisers</span></div>" +
+      "</div>" +
+      '<aside class="card donate-box stack" aria-label="Active fundraiser">' +
+        '<div class="row" style="justify-content:space-between"><span class="eyebrow">Active fundraiser</span>' + sampleTag(c) + "</div>" +
+        '<h2 style="font-size:1.4rem">' + esc(c.title) + "</h2>" +
+        progressBlock(c) +
+        gfmButton(c, "block lg") +
+        '<a class="btn ghost block" href="#donate">Where the money goes</a>' +
+      "</aside>" +
+    "</div></section>" +
+
+    '<section class="section"><div class="wrap">' +
+      '<div class="section-head"><h2>Latest updates</h2><a href="#news">View all →</a></div>' +
+      '<div class="grid">' + latest.map(postCard).join("") + "</div>" +
+    "</div></section>" +
+
+    '<section class="section"><div class="wrap">' +
+      '<div class="section-head"><h2>Act in five minutes</h2></div>' +
+      '<div class="grid">' +
+        '<div class="panel stack" style="--gap:.6rem"><span class="eyebrow">Petition</span><h3>' + esc(CONTENT.petitions[0].title) + '</h3><p class="muted small">Takes under a minute on ' + esc(CONTENT.petitions[0].host) + '.</p><a class="btn primary" style="margin-top:auto" href="#action">Sign the petition</a></div>' +
+        '<div class="panel stack" style="--gap:.6rem"><span class="eyebrow">Write your representative</span><h3>Letter template ready to send</h3><p class="muted small">Add your name and ZIP code. We fill in the rest.</p><a class="btn" style="margin-top:auto" href="#letter">Write my letter</a></div>' +
+        '<div class="panel stack" style="--gap:.6rem"><span class="eyebrow">Share</span><h3>Tell three people today</h3><p class="muted small">Most of our readers find us through a friend\'s share.</p><button class="btn" style="margin-top:auto" data-copy="' + esc(pageUrl("")) + '">' + ICON.link + "Copy site link</button></div>" +
+      "</div>" +
+    "</div></section>" +
+
+    '<section class="section"><div class="wrap">' +
+      '<div class="section-head"><h2>How we verify</h2></div>' +
+      '<div class="trust">' +
+        "<div>" + ICON.check + "<div><h3>Every claim has a source</h3><p>Posts link to UN agencies, rights groups, and established outlets. Unconfirmed reports are labeled Developing.</p></div></div>" +
+        "<div>" + ICON.shield + "<div><h3>People are protected</h3><p>Names, faces, and locations are removed from firsthand accounts before they are published.</p></div></div>" +
+        "<div>" + ICON.lock + "<div><h3>Donations go through GoFundMe</h3><p>Payments happen on GoFundMe's secure checkout. We never handle your card details.</p></div></div>" +
+      "</div>" +
+    "</div></section>";
+  };
+
+  var newsState = { region: store("region") || "All", q: "" };
+  VIEWS.news = function () {
+    var counts = { All: CONTENT.posts.length };
+    CONTENT.posts.forEach(function (p) { counts[p.region] = (counts[p.region] || 0) + 1; });
+    var tabs = ["All"].concat(CONTENT.regions);
+    return '<div class="wrap page-head"><p class="eyebrow">News &amp; Updates</p><h1 style="margin-top:.4rem">What is happening, verified</h1>' +
+      '<p class="prose">Newest first. Every post shows its sources. Reports still being confirmed are marked Developing.</p></div>' +
+      '<div class="wrap stack" style="padding-bottom:3rem">' +
+        '<div class="field"><label for="news-q" class="sr-only">Search updates</label><input id="news-q" type="search" placeholder="Search updates" value="' + esc(newsState.q) + '"></div>' +
+        '<div class="chips" role="group" aria-label="Filter by region">' + tabs.map(function (r) {
+          return '<button class="chip" data-region="' + esc(r) + '" aria-pressed="' + (newsState.region === r) + '">' + esc(r) + '<span class="n">' + (counts[r] || 0) + "</span></button>";
+        }).join("") + "</div>" +
+        '<div class="post-list" id="post-list"></div>' +
+      "</div>";
+  };
+  function renderNewsList() {
+    var list = $("#post-list"); if (!list) return;
+    var q = newsState.q.trim().toLowerCase();
+    var items = CONTENT.posts.filter(function (p) {
+      return (newsState.region === "All" || p.region === newsState.region) &&
+        (!q || (p.title + " " + p.summary + " " + p.region).toLowerCase().indexOf(q) > -1);
+    });
+    list.innerHTML = items.length ? items.map(function (p) {
+      return '<div class="post-row"><div class="when"><b>' + gDate(p.date) + "</b>" + eDate(p.date) + "</div>" + postCard(p) + "</div>";
+    }).join("") : '<div class="empty card"><p><b>No updates match.</b></p><p class="small" style="margin-top:.35rem">Try another region or clear the search.</p></div>';
+  }
+
+  VIEWS.post = function (id) {
+    var p = CONTENT.posts.filter(function (x) { return x.id === id; })[0];
+    if (!p) return VIEWS.notfound();
+    var action = p.type === "action" || p.cta === "action";
+    return '<article class="wrap article" style="padding-block:1.5rem 3rem">' +
+      '<a class="back" href="#news">' + ICON.arrowL + "All updates</a>" +
+      '<div class="row" style="--gap:.4rem;margin-top:1.25rem"><span class="tag ' + p.type + '">' + TYPE_LABEL[p.type] + '</span><span class="tag">' + esc(p.region) + "</span>" + sampleTag(p) + "</div>" +
+      "<h1>" + esc(p.title) + "</h1>" +
+      '<div class="meta" style="margin-top:.75rem;font-size:.88rem"><span>' + gDate(p.date) + '</span><span class="dot">' + eDate(p.date) + '</span><span class="dot">' + statusBadge(p) + "</span></div>" +
+      (p.anonymized ? '<div class="safety" style="margin-top:1.25rem">' + ICON.shield + "<span>Names, faces, and exact locations in this account were removed to protect the people involved.</span></div>" : "") +
+      '<p style="margin-top:1.25rem;font-size:1.15rem;color:var(--ink-2)">' + esc(p.summary) + "</p>" +
+      '<div class="body">' + (p.body || []).map(function (t) { return "<p>" + esc(t) + "</p>"; }).join("") + "</div>" +
+      ((p.sources || []).length ? '<h2 style="font-size:1.2rem;margin:2rem 0 .75rem">Sources</h2><ul class="source-list">' + p.sources.map(function (s) {
+        return '<li><a href="' + esc(s.url) + '" target="_blank" rel="noopener"><span>' + esc(s.label) + "<br><small>" + esc(s.url.replace(/^https?:\/\//, "")) + "</small></span>" + ICON.ext + "</a></li>";
+      }).join("") + "</ul>" : "") +
+      (action ? '<div class="panel stack" style="margin-top:2rem"><h3>Take the next step</h3><div class="row"><a class="btn primary" href="#action">Sign the petition</a><a class="btn" href="#letter">Write your representative</a></div></div>' : "") +
+      '<h2 style="font-size:1.2rem;margin:2rem 0 .75rem">Share this update</h2>' + shareBar("post-" + p.id, p.title) +
+    "</article>";
+  };
+
+  var LETTER_TOPICS = {
+    access: { label: "Humanitarian access", ask: "press the Ethiopian government and all armed groups to allow full, safe, and unrestricted humanitarian access" },
+    civilians: { label: "Protection of civilians and places of worship", ask: "publicly condemn attacks on civilians and places of worship, and make their protection a condition of U.S. assistance" },
+    investigate: { label: "Independent investigation", ask: "support an independent, international investigation into abuses against civilians and ensure its findings are made public" }
+  };
+  var letterState = Object.assign({ name: "", city: "", zip: "", topic: "access", note: "" }, store("letter") || {});
+  function letterText() {
+    var s = letterState, t = LETTER_TOPICS[s.topic] || LETTER_TOPICS.access;
+    return "Dear Representative,\n\n" +
+      "My name is " + (s.name || "[your name]") + ", and I am your constituent in " + (s.city || "[city, state]") + (s.zip ? " (" + s.zip + ")" : "") + ".\n\n" +
+      "I am writing about the ongoing violence against civilians in Ethiopia, including in the Amhara, Oromia, and Tigray regions. Families are being displaced, communities are being attacked, and aid is not reaching many of the people who need it.\n\n" +
+      "I urge you to " + t.ask + ".\n\n" +
+      (s.note ? s.note.trim() + "\n\n" : "") +
+      "Please let me know what action you will take.\n\n" +
+      "Sincerely,\n" + (s.name || "[your name]") + "\n" + (s.city || "[city, state]") + (s.zip ? " " + s.zip : "");
+  }
+
+  VIEWS.action = function () {
+    var s = letterState;
+    return '<div class="wrap page-head"><p class="eyebrow">Take Action</p><h1 style="margin-top:.4rem">Contact Congress in three steps</h1>' +
+      '<p class="prose">Sign a petition, send a letter, and share. Each step takes a few minutes.</p></div>' +
+      '<div class="wrap" style="padding-bottom:1rem"><ol class="steps" style="list-style:none;margin:0;padding:0">' +
+        '<li class="step"><div><b>Sign a petition</b><p class="muted small">Add your name to the open petitions below.</p></div></li>' +
+        '<li class="step"><div><b>Write your representative</b><p class="muted small">Fill in the letter, copy it, and send it through their contact form.</p></div></li>' +
+        '<li class="step"><div><b>Share with three people</b><p class="muted small">Every share reaches people we cannot.</p></div></li>' +
+      "</ol></div>" +
+
+      '<section class="section"><div class="wrap"><div class="section-head"><h2>Open petitions</h2></div><div class="grid-2">' +
+        CONTENT.petitions.map(function (p) {
+          return '<div class="card stack" style="--gap:.6rem"><div class="row" style="--gap:.4rem"><span class="tag action">Petition</span>' + sampleTag(p) + "</div><h3>" + esc(p.title) + '</h3><p class="muted small">' + esc(p.text) + '</p><div class="row" style="margin-top:auto"><a class="btn primary" href="' + esc(p.url) + '" target="_blank" rel="noopener">Sign on ' + esc(p.host) + " " + ICON.ext + '</a><button class="btn ghost sm" data-copy="' + esc(p.url) + '">' + ICON.link + "Copy link</button></div></div>";
+        }).join("") +
+      "</div></div></section>" +
+
+      '<section class="section" id="letter"><div class="wrap">' +
+        '<div class="section-head"><h2>Write your representative</h2></div>' +
+        '<div class="letter-grid">' +
+          '<form class="card stack" id="letter-form" novalidate>' +
+            '<div class="field"><label for="l-name">Your full name</label><input id="l-name" name="name" autocomplete="name" value="' + esc(s.name) + '"></div>' +
+            '<div class="two"><div class="field"><label for="l-city">City and state</label><input id="l-city" name="city" autocomplete="address-level2" placeholder="Denver, CO" value="' + esc(s.city) + '"></div>' +
+            '<div class="field"><label for="l-zip">ZIP code</label><input id="l-zip" name="zip" inputmode="numeric" autocomplete="postal-code" maxlength="10" value="' + esc(s.zip) + '"></div></div>' +
+            '<div class="field"><label for="l-topic">What you are asking for</label><select id="l-topic" name="topic">' +
+              Object.keys(LETTER_TOPICS).map(function (k) { return '<option value="' + k + '"' + (s.topic === k ? " selected" : "") + ">" + LETTER_TOPICS[k].label + "</option>"; }).join("") +
+            "</select></div>" +
+            '<div class="field"><label for="l-note">Add a personal line <span class="muted">(optional)</span></label><textarea id="l-note" name="note" placeholder="Why this matters to you, in a sentence or two">' + esc(s.note) + '</textarea><span class="hint">A personal sentence makes a letter far more likely to be read.</span></div>' +
+            '<p class="small muted">Your details stay on this device. Nothing is sent to us.</p>' +
+          "</form>" +
+          '<div class="letter-out stack">' +
+            '<div class="letter-paper" id="letter-paper" tabindex="0" aria-label="Your letter"></div>' +
+            '<div class="row"><button class="btn primary" id="copy-letter">' + ICON.doc + "Copy letter</button>" +
+            '<a class="btn" href="https://www.house.gov/representatives/find-your-representative" target="_blank" rel="noopener">Find my representative ' + ICON.ext + "</a>" +
+            '<a class="btn ghost" href="https://www.senate.gov/senators/senators-contact.htm" target="_blank" rel="noopener">Find my senators ' + ICON.ext + "</a></div>" +
+            '<p class="small muted">Paste the letter into your representative\'s contact form. Most forms ask for your ZIP code first.</p>' +
+          "</div>" +
+        "</div>" +
+      "</div></section>" +
+
+      '<section class="section"><div class="wrap stack"><h2>Share Take Action</h2>' + shareBar("action", "Contact Congress about the crisis in Ethiopia. It takes five minutes.") + "</div></section>";
+  };
+
+  VIEWS.donate = function () {
+    var c = featured(), others = CONTENT.campaigns.filter(function (x) { return x !== c; });
+    return '<div class="wrap page-head"><p class="eyebrow">Donate</p><h1 style="margin-top:.4rem">Give directly to communities rebuilding</h1>' +
+      '<p class="prose">Every campaign runs on GoFundMe, so you can see the organizer, updates, and withdrawals for yourself.</p></div>' +
+      '<div class="wrap" style="padding-bottom:1rem"><div class="fund-hero">' +
+        '<div class="stack" style="--gap:1.5rem">' +
+          '<div class="stack" style="--gap:.5rem"><div class="row" style="--gap:.4rem"><span class="tag">' + esc(c.region) + "</span>" + sampleTag(c) + "</div><h2>" + esc(c.title) + '</h2><p class="muted small">Organized by ' + esc(c.organizer) + "</p></div>" +
+          '<p class="prose" style="font-size:1.05rem">' + esc(c.summary) + "</p>" +
+          (c.uses.length ? '<div class="card stack"><h3>Where the money goes</h3><div class="alloc">' + c.uses.map(function (u) {
+            return '<div class="alloc-row"><span>' + esc(u.label) + "</span><b>" + u.pct + '%</b><div class="progress"><i style="--p:' + u.pct + '%"></i></div></div>';
+          }).join("") + "</div>" + (c.sample ? '<p class="small muted">Sample split. Replace with the campaign\'s real budget.</p>' : "") + "</div>" : "") +
+          (c.updates.length ? '<div class="stack"><h3>Progress updates</h3><ol class="timeline">' + c.updates.map(function (u) {
+            return '<li><span class="date">' + gDate(u.date) + "</span><p>" + esc(u.text) + "</p></li>";
+          }).join("") + "</ol></div>" : "") +
+          '<div id="gfm-widget"></div>' +
+        "</div>" +
+        '<aside class="card donate-box stack" aria-label="Donate">' +
+          progressBlock(c, true) +
+          gfmButton(c, "block lg") +
+          '<button class="btn block" data-copy="' + esc(c.gofundmeUrl) + '">' + ICON.link + "Copy campaign link</button>" +
+          '<div class="gfm-note">' + ICON.lock + "<span>You'll finish on GoFundMe's secure checkout. GoFundMe charges no platform fee; card processing is about 2.9% + $0.30 per donation.</span></div>" +
+          '<div class="gfm-note">' + ICON.info + "<span>Personal GoFundMe fundraisers are usually not tax-deductible. Check the campaign page for details.</span></div>" +
+        "</aside>" +
+      "</div></div>" +
+      (others.length ? '<section class="section"><div class="wrap"><div class="section-head"><h2>Other campaigns</h2></div><div class="grid-2">' + others.map(function (o) {
+        return '<div class="card stack"><div class="row" style="--gap:.4rem"><span class="tag">' + esc(o.region) + "</span>" + sampleTag(o) + "</div><h3>" + esc(o.title) + '</h3><p class="muted small">' + esc(o.summary) + "</p>" + progressBlock(o) + gfmButton(o) + "</div>";
+      }).join("") + "</div></div></section>" : "") +
+      '<section class="section"><div class="wrap stack"><h2>Can\'t give right now?</h2><p class="prose">Sharing a campaign helps almost as much. Most donations come from people who saw a friend share it.</p>' + shareBar("donate", "Help " + c.title.toLowerCase() + ". Donate or share:") + "</div></section>";
+  };
+
+  VIEWS.learn = function () {
+    return '<div class="wrap page-head"><p class="eyebrow">Learn</p><h1 style="margin-top:.4rem">Understand what is happening, and why</h1>' +
+      '<p class="prose">Background on the conflicts, the regions and communities affected, and articles adapted from our slide series.</p></div>' +
+      '<section class="section" style="padding-top:1rem"><div class="wrap grid-2" style="align-items:start">' +
+        '<div class="stack"><h2>Timeline</h2>' + draftNote("Draft. Add a source link to every entry before it goes live.") +
+          '<ol class="timeline">' + CONTENT.timeline.map(function (t) {
+            return '<li><span class="date">' + esc(t.date) + "</span><h3>" + esc(t.title) + "</h3><p>" + esc(t.text) + "</p></li>";
+          }).join("") + "</ol></div>" +
+        '<div class="stack"><h2>Regions and communities</h2><div>' + CONTENT.regionsInfo.map(function (r, i) {
+            var n = CONTENT.posts.filter(function (p) { return p.region === r.name; }).length;
+            return '<details class="acc"' + (i === 0 ? " open" : "") + "><summary>" + esc(r.name) + '</summary><div class="acc-body stack" style="--gap:.75rem"><p class="prose">' + esc(r.text) + "</p>" +
+              (n ? '<a href="#news" data-go-region="' + esc(r.name) + '">See ' + n + " update" + (n > 1 ? "s" : "") + " from " + esc(r.name) + " →</a>" : "") + "</div></details>";
+          }).join("") + "</div></div>" +
+      "</div></section>" +
+      '<section class="section"><div class="wrap"><div class="section-head"><h2>Articles</h2></div><div class="grid">' +
+        CONTENT.articles.map(function (a) {
+          return '<div class="card stack" style="--gap:.5rem"><span class="eyebrow">' + esc(a.note) + "</span><h3>" + esc(a.title) + "</h3>" + (a.ready ? "" : '<span class="tag" style="align-self:flex-start">Coming soon</span>') + "</div>";
+        }).join("") +
+      "</div></div></section>" +
+      '<section class="section"><div class="wrap stack"><h2>Sources we rely on</h2><ul class="source-list grid-2">' + CONTENT.sources.map(function (s) {
+        return '<li><a href="' + esc(s.url) + '" target="_blank" rel="noopener"><span>' + esc(s.label) + "</span>" + ICON.ext + "</a></li>";
+      }).join("") + "</ul></div></section>";
+  };
+
+  VIEWS.about = function () {
+    return '<div class="wrap page-head"><p class="eyebrow">About &amp; Contact</p><h1 style="margin-top:.4rem">Who runs this site, and why</h1></div>' +
+      '<div class="wrap grid-2" style="padding-bottom:3rem;align-items:start">' +
+        '<div class="stack" style="--gap:1.25rem">' +
+          '<div class="prose"><p>Ethiopia Crisis Watch is run by Soleyana, a member of the Ethiopian diaspora, with a small group of volunteers. We collect verified reports, make them easy to understand, and turn attention into action: signatures, letters to Congress, and donations to communities rebuilding.</p>' +
+          "<p>We are not affiliated with any government, party, or armed group. We correct mistakes openly and note the correction on the post.</p></div>" +
+          '<div class="card stack" style="--gap:.75rem"><h3>Sharing a firsthand account</h3>' +
+            '<div class="safety">' + ICON.shield + "<span>Use a device and account that others can't access. Don't include your full name or your family's names in your first message.</span></div>" +
+            '<p class="small muted">We remove names, faces, village names, and anything else that could identify you before publishing, and we tell readers what was removed. We never publish without your permission.</p></div>' +
+          '<div class="stack" style="--gap:.4rem"><h3>Follow</h3><div class="row">' + CONFIG.social.map(function (s) { return '<a class="btn sm" href="' + esc(s.url) + '" target="_blank" rel="noopener">' + esc(s.name) + "</a>"; }).join("") + "</div></div>" +
+          '<p class="small muted">Email: <span style="user-select:all;color:var(--ink)">' + esc(CONFIG.contactEmail) + '</span> <button class="btn ghost sm" data-copy="' + esc(CONFIG.contactEmail) + '">Copy</button></p>' +
+        "</div>" +
+        '<form class="card stack" id="contact-form" novalidate>' +
+          "<h2 style=\"font-size:1.3rem\">Contact us</h2>" +
+          '<div class="field"><label for="c-topic">What is this about?</label><select id="c-topic" name="topic"><option>General question</option><option>Share a firsthand account</option><option>Report a correction</option><option>Press or partnership</option></select></div>' +
+          '<div class="field"><label for="c-name">Name <span class="muted">(a first name or nickname is fine)</span></label><input id="c-name" name="name" autocomplete="given-name"></div>' +
+          '<div class="field"><label for="c-email">Email</label><input id="c-email" name="email" type="email" autocomplete="email" required></div>' +
+          '<div class="field"><label for="c-msg">Message</label><textarea id="c-msg" name="message" required style="min-height:8rem"></textarea></div>' +
+          '<button class="btn primary" type="submit">Send message</button>' +
+          '<p class="small" id="c-status" role="status"></p>' +
+        "</form>" +
+      "</div>";
+  };
+
+  VIEWS.notfound = function () {
+    return '<div class="wrap page-head stack" style="padding-bottom:4rem"><h1>Page not found</h1><p class="prose">That link may be out of date.</p><div class="row"><a class="btn primary" href="#home">Go home</a><a class="btn" href="#news">Latest updates</a></div></div>';
+  };
+
+  var TITLES = { home: "", news: "News & Updates", action: "Take Action", donate: "Donate", learn: "Learn", about: "About & Contact" };
+
+  /* ── router ─────────────────────────────────────── */
+  function route() {
+    var h = (location.hash || "#home").slice(1), view = h, arg = null, anchor = null;
+    if (h.indexOf("post-") === 0) { view = "post"; arg = h.slice(5); }
+    if (h === "letter") { view = "action"; anchor = "letter"; }
+    if (h === "main") return;
+    if (!VIEWS[view]) view = "notfound";
+    main.innerHTML = '<div class="view">' + VIEWS[view](arg) + "</div>";
+    var navKey = view === "post" ? "news" : view;
+    document.querySelectorAll(".nav a, .drawer-panel a.nav-item").forEach(function (a) {
+      a.getAttribute("href") === "#" + navKey ? a.setAttribute("aria-current", "page") : a.removeAttribute("aria-current");
+    });
+    $("#head-donate").hidden = view === "donate";
+    var t = view === "post" ? ($("h1", main) || {}).textContent : TITLES[view];
+    document.title = (t ? t + " · " : "") + CONFIG.siteName;
+    closeDrawer();
+    if (view === "news") renderNewsList();
+    if (view === "action") renderLetter();
+    if (view === "donate") mountWidget();
+    if (anchor) { var el = document.getElementById(anchor); if (el) el.scrollIntoView(); }
+    else window.scrollTo(0, 0);
+    main.focus({ preventScroll: true });
+  }
+
+  /* ── behaviour ──────────────────────────────────── */
+  function renderLetter() { var p = $("#letter-paper"); if (p) p.textContent = letterText(); }
+
+  function mountWidget() {
+    var host = $("#gfm-widget"), c = featured();
+    if (!CONFIG.gofundmeWidget || !host) return;
+    host.innerHTML = '<div class="gfm-embed" data-url="' + esc(c.gofundmeUrl.replace(/\/+$/, "") + "/widget/large") + '"></div>';
+    var s = document.createElement("script"); s.defer = true; s.src = "https://www.gofundme.com/static/js/embed.js"; document.body.appendChild(s);
+  }
+
+  var toastTimer;
+  function toast(msg) { var t = $("#toast"); t.textContent = msg; t.classList.add("show"); clearTimeout(toastTimer); toastTimer = setTimeout(function () { t.classList.remove("show"); }, 2600); }
+
+  function copy(text, done) {
+    var ok = function () { toast(done || "Copied"); };
+    var fallback = function () {
+      var ta = document.createElement("textarea"); ta.value = text; ta.setAttribute("readonly", ""); ta.style.position = "fixed"; ta.style.opacity = "0";
+      document.body.appendChild(ta); ta.select();
+      try { document.execCommand("copy") ? ok() : toast("Select the text and copy it manually"); } catch (e) { toast("Select the text and copy it manually"); }
+      ta.remove();
+    };
+    if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(text).then(ok, fallback); else fallback();
+  }
+
+  var drawer = $("#drawer"), menuBtn = $("#menu-open");
+  function openDrawer() { drawer.hidden = false; menuBtn.setAttribute("aria-expanded", "true"); $(".drawer-panel a.nav-item", drawer).focus(); }
+  function closeDrawer() { if (drawer.hidden) return; drawer.hidden = true; menuBtn.setAttribute("aria-expanded", "false"); }
+  menuBtn.addEventListener("click", openDrawer);
+  drawer.addEventListener("click", function (e) { if (e.target.closest("[data-close]")) { closeDrawer(); menuBtn.focus(); } });
+  document.addEventListener("keydown", function (e) { if (e.key === "Escape" && !drawer.hidden) { closeDrawer(); menuBtn.focus(); } });
+
+  document.addEventListener("click", function (e) {
+    var b = e.target.closest("[data-copy]");
+    if (b) { e.preventDefault(); copy(b.getAttribute("data-copy"), "Link copied"); return; }
+    var chip = e.target.closest("[data-region]");
+    if (chip) {
+      newsState.region = chip.getAttribute("data-region"); store("region", newsState.region);
+      document.querySelectorAll("[data-region]").forEach(function (c) { c.setAttribute("aria-pressed", c === chip); });
+      renderNewsList(); return;
+    }
+    var go = e.target.closest("[data-go-region]");
+    if (go) { newsState.region = go.getAttribute("data-go-region"); store("region", newsState.region); }
+    if (e.target.closest("#copy-letter")) { copy(letterText(), "Letter copied. Paste it into your representative's contact form."); }
+  });
+
+  document.addEventListener("input", function (e) {
+    if (e.target.id === "news-q") { newsState.q = e.target.value; renderNewsList(); }
+    if (e.target.closest("#letter-form")) { letterState[e.target.name] = e.target.value; store("letter", letterState); renderLetter(); }
+  });
+
+  function validEmail(v) { return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v); }
+  function post(endpoint, data) {
+    return fetch(endpoint, { method: "POST", headers: { "Content-Type": "application/json", Accept: "application/json" }, body: JSON.stringify(data) })
+      .then(function (r) { if (!r.ok) throw new Error(r.status); });
+  }
+
+  document.addEventListener("submit", function (e) {
+    var f = e.target; e.preventDefault();
+    if (f.id === "nl-form") {
+      var em = $("#nl-email").value.trim(), msg = $("#nl-msg");
+      if (!validEmail(em)) { msg.textContent = "Enter an email address like name@email.com."; $("#nl-email").focus(); return; }
+      if (!CONFIG.newsletterEndpoint) { msg.textContent = "Signup isn't connected yet, so nothing was sent. (Set newsletterEndpoint in the site config.)"; return; }
+      msg.textContent = "Subscribing…";
+      post(CONFIG.newsletterEndpoint, { email: em }).then(function () { msg.textContent = "You're subscribed. Check your inbox to confirm."; f.reset(); },
+        function () { msg.textContent = "That didn't go through. Check your connection and try again."; });
+    }
+    if (f.id === "contact-form") {
+      var st = $("#c-status"), data = { topic: $("#c-topic").value, name: $("#c-name").value.trim(), email: $("#c-email").value.trim(), message: $("#c-msg").value.trim() };
+      if (!validEmail(data.email)) { st.textContent = "Add an email address so we can reply."; $("#c-email").focus(); return; }
+      if (!data.message) { st.textContent = "Write a message before sending."; $("#c-msg").focus(); return; }
+      if (!CONFIG.contactEndpoint) { st.textContent = "The form isn't connected yet, so nothing was sent. Email " + CONFIG.contactEmail + " instead."; return; }
+      st.textContent = "Sending…";
+      post(CONFIG.contactEndpoint, data).then(function () { st.textContent = "Message sent. We usually reply within two days."; f.reset(); },
+        function () { st.textContent = "That didn't go through. Try again, or email " + CONFIG.contactEmail + "."; });
+    }
+  });
+
+  $("#foot-social").innerHTML = CONFIG.social.map(function (s) { return '<li><a href="' + esc(s.url) + '" target="_blank" rel="noopener">' + esc(s.name) + "</a></li>"; }).join("");
+  $("#foot-updated").textContent = "Last updated " + gDate(CONTENT.posts[0].date);
+
+  window.addEventListener("hashchange", route);
+  route();
+})();
+</script>
+</body>
+</html>
